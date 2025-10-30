@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Menú{% endblock %}
+{% block content %}
+<h1 class="h4 mb-3">Menú</h1>
+<div id="products" class="row g-3"></div>
+<a href="/checkout/" class="btn btn-primary mt-3">Ir al pedido</a>
+
+<script>
+const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+function add(p){ cart.push({product_name:p.name, qty:1, unit_price:p.price, subtotal:p.price}); localStorage.setItem('cart', JSON.stringify(cart)); alert('Agregado'); }
+(async ()=>{
+  const r = await fetch('/api/products/'); const data = await r.json();
+  const html = (data||[]).filter(p=>p.available).map(p=>`
+    <div class="col-12 col-md-6">
+      <div class="card"><div class="card-body">
+        <h5 class="card-title mb-1">${p.name}</h5>
+        <p class="mb-2">$${p.price}</p>
+        <button class="btn btn-sm btn-outline-primary" onclick='add(${JSON.stringify(p)})'>Agregar</button>
+      </div></div>
+    </div>`).join('');
+  document.getElementById('products').innerHTML = html;
+})();
+</script>
+{% endblock %}

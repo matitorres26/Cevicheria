@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Nuevo pedido{% endblock %}
+{% block content %}
+<h1 class="h4 mb-3">Nuevo pedido</h1>
+<form id="f" class="card card-body">
+  <div class="mb-2">
+    <label class="form-label">ID Cliente</label>
+    <input class="form-control" name="customer" placeholder="1" required>
+  </div>
+  <div class="mb-2">
+    <label class="form-label">Producto</label>
+    <input class="form-control" name="product_name" placeholder="Ceviche clásico" required>
+  </div>
+  <div class="row">
+    <div class="col mb-2">
+      <label class="form-label">Qty</label>
+      <input type="number" class="form-control" name="qty" value="1" min="1" required>
+    </div>
+    <div class="col mb-2">
+      <label class="form-label">Precio</label>
+      <input type="number" class="form-control" name="unit_price" value="6500" min="0" required>
+    </div>
+  </div>
+  <button class="btn btn-primary">Crear pedido</button>
+  <div id="msg" class="mt-2"></div>
+</form>
+
+<script>
+// CSRF para POST desde template Django
+function getCookie(name){return document.cookie.split('; ').find(row=>row.startsWith(name+'='))?.split('=')[1];}
+const csrftoken = getCookie('csrftoken');
+
+document.getElementById('f').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const body = {
+    customer: Number(fd.get('customer')),
+    payment_method: "CASH",
+    items: [{
+      product_name: fd.get('product_name'),
+      qty: Number(fd.get('qty')),
+      unit_price: Number(fd.get('unit_price')),
+      subtotal: Number(fd.get('qty')) * Number(fd.get('unit_price'))
+    }]
+  };
+  const r = await fetch('/api/orders/', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json', 'X-CSRFToken': csrftoken},
+    body: JSON.stringify(body)
+  });
+  const out = document.getElementById('msg');
+  if(r.ok){ out.innerHTML = '<div class="alert alert-success">Pedido creado ✅</div>'; e.target.reset(); }
+  else { const err = await r.json(); out.innerHTML = `<pre class="alert alert-danger">${JSON.stringify(err,null,2)}</pre>`; }
+});
+</script>
+{% endblock %}
