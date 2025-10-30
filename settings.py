@@ -16,9 +16,7 @@ from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
-TATICFILES_DIRS = [
-    BASE_DIR / "cevicheria/static",
-]
+
 # ----- Core -----
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-key-no-segura")
 DEBUG = os.getenv("DEBUG", "1") == "1"
