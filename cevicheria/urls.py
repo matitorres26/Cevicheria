@@ -20,7 +20,8 @@ from rest_framework.routers import DefaultRouter
 from pedidos.views import CustomerViewSet, ProductViewSet, OrderViewSet,PublicOrderCreateView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from django.views.generic import TemplateView  
-
+from django.conf import settings
+from django.conf.urls.static import static
 # Rutas API REST
 router = DefaultRouter()
 router.register(r"customers", CustomerViewSet)
@@ -32,16 +33,18 @@ urlpatterns = [
     path("admin/", admin.site.urls),
 
     # Documentación y esquema API
-    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
-    path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema")),
+    #path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    #path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema")),
 
     # Endpoints de la API
     path("api/", include(router.urls)),
     path("api/public/orders/", PublicOrderCreateView.as_view(), name="public-order-create"),
 
     # Páginas HTML  (Bootstrap)
-    path("", TemplateView.as_view(template_name="index.html"), name="home"),        
+    path("", TemplateView.as_view(template_name="menu.html"), name="home"),        
     path("nuevo/", TemplateView.as_view(template_name="order_new.html"), name="nuevo"),  
-    path("menu/", TemplateView.as_view(template_name="menu.html"), name="menu"),
+    path("index/", TemplateView.as_view(template_name="index.html"), name="index"),
     path("checkout/", TemplateView.as_view(template_name="checkout.html"), name="checkout"),
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

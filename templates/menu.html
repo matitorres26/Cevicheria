@@ -74,7 +74,7 @@ nav a.btn:hover {transform:scale(1.05);}
     </div>
     <nav>
       <a href="#inicio">Inicio</a>
-      <a href="#menu">Menú</a>
+      <a href="#index">Menú</a>
       <a href="#promociones">Promociones</a>
       <a href="#nosotros">Nosotros</a>
       <a href="#pedido" class="btn">Pedir Ahora</a>
@@ -82,7 +82,7 @@ nav a.btn:hover {transform:scale(1.05);}
     <h1 class="display-4 fw-bold mt-5">¡Salvamos tu apetito!</h1>
     <h1 class="display-4 fw-bold mt-5">Abierto : Lunes, Miercoles y jueves de 17 a 23 horas</h1>
     <div class="mt-4">
-      <a href="#menu" class="btn btn-success btn-lg scroll-btn me-2">Ver Menú</a>
+      <a href="#index" class="btn btn-success btn-lg scroll-btn me-2">Ver Menú</a>
       <a href="#pedido" class="btn btn-warning btn-lg">Haz tu Pedido</a>
     </div>
   </div>
@@ -200,7 +200,7 @@ document.getElementById('addToCartModal').addEventListener('click',()=>{
   const html = (data||[]).filter(p=>p.available).map(p=>`
     <div class="col-12 col-md-6 col-lg-4">
       <div class="card h-100 shadow-sm text-center">
-        <img src="${p.image || 'default.jpg'}" class="card-img-top" alt="${p.name}">
+       <img src="${p.image_url}" class="card-img-top" alt="${p.name}">
         <div class="card-body">
           <h5 class="card-title">${p.name}</h5>
           <p class="card-text mb-2">$${p.price}</p>

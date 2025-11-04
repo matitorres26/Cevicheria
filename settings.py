@@ -17,12 +17,12 @@ from dotenv import load_dotenv
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
 
-# ----- Core -----
+
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-key-no-segura")
 DEBUG = os.getenv("DEBUG", "1") == "1"
 ALLOWED_HOSTS = ["*"]
 
-# ----- Apps -----
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -30,11 +30,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # terceros
     "rest_framework",
     "drf_spectacular",
-    "channels",          # 👈 necesario para WebSockets
-    # local
+    "channels",          
     "pedidos",
 ]
 
@@ -65,11 +63,10 @@ TEMPLATES = [
     },
 ]
 
-# WSGI se deja por compatibilidad; Channels usa ASGI
 WSGI_APPLICATION = "cevicheria.wsgi.application"
-ASGI_APPLICATION = "cevicheria.asgi.application"   # 👈 clave
+ASGI_APPLICATION = "cevicheria.asgi.application"   
 
-# ----- DB -----
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -81,7 +78,7 @@ DATABASES = {
     }
 }
 
-# ----- Channels: elige InMemory (dev) o Redis (prod) con variable .env -----
+
 USE_INMEMORY_CHANNEL_LAYER = os.getenv("USE_INMEMORY_CHANNEL_LAYER", "1") == "1"
 
 if USE_INMEMORY_CHANNEL_LAYER:
@@ -96,7 +93,7 @@ else:
         }
     }
 
-# ----- DRF + OpenAPI -----
+
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
@@ -105,7 +102,6 @@ SPECTACULAR_SETTINGS = {
     "VERSION": "1.0.0",
 }
 
-# ----- Internacionalización y static -----
 LANGUAGE_CODE = "es-cl"
 TIME_ZONE = "America/Santiago"
 USE_I18N = True

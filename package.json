@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@tauri-apps/plugin-fs": "^2.4.4",
     "express": "^5.1.0",
     "react": "^19.2.0"
   },

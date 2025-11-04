@@ -15,11 +15,11 @@ from .serializers import (
     PublicOrderSerializer,
 )
 
-# ---- API interna (admin/operación) ----
+
 class CustomerViewSet(viewsets.ModelViewSet):
     queryset = Customer.objects.all().order_by("-id")
     serializer_class = CustomerSerializer
-    permission_classes = [AllowAny]  # endurecer luego si quieres
+    permission_classes = [AllowAny]  
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all().order_by("name")
@@ -33,14 +33,14 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         order = serializer.save()
-        # Broadcast a todos los clientes WebSocket suscritos al grupo "orders"
+        
         layer = get_channel_layer()
         async_to_sync(layer.group_send)(
             "orders",
             {"type": "new.order", "order_id": order.id}
         )
 
-# ---- API pública (checkout) ----
+
 @method_decorator(csrf_exempt, name="dispatch")
 class PublicOrderCreateView(CreateAPIView):
     permission_classes = [AllowAny]
@@ -48,7 +48,6 @@ class PublicOrderCreateView(CreateAPIView):
 
     def perform_create(self, serializer):
         order = serializer.save()
-        # Broadcast cuando entra un pedido desde el checkout público
         layer = get_channel_layer()
         async_to_sync(layer.group_send)(
             "orders",
