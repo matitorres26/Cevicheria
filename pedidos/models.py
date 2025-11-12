@@ -16,7 +16,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     available = models.BooleanField(default=True)
     
-    image = models.ImageField(upload_to="products/", blank=True, null=True)  # 🆕 nuevo campo
+    image = models.ImageField(upload_to="products/", blank=True, null=True) 
 
     def __str__(self):
         return self.name
@@ -27,13 +27,22 @@ class Order(models.Model):
         ("IN_PROGRESS", "En preparación"),
         ("READY", "Listo"),
         ("DELIVERED", "Entregado"),
+        ("PAID", "Pagado"),  
+        ("FAILED", "Fallido"), 
     ]
+
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT, related_name="orders")
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="NEW")
     total_price = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     payment_method = models.CharField(max_length=20, default="CASH")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    token_ws = models.CharField(max_length=255, blank=True, null=True)
+    buy_order = models.CharField(max_length=100, blank=True, null=True)
+    session_id = models.CharField(max_length=100, blank=True, null=True)
+    payment_status = models.CharField(max_length=20, default="PENDING")
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
@@ -51,3 +60,5 @@ class DailyReport(models.Model):
 
     def __str__(self):
         return f"Reporte {self.date}"
+    
+    

@@ -155,11 +155,10 @@ form input:focus, form select:focus {
       <input type="email" class="form-control" name="email" placeholder="Ej: cliente@email.com">
     </div>
     <div class="mb-4">
-      <label>Método de pago</label>
-      <select class="form-select" name="payment_method">
+      <label for="payment_method">Método de pago</label>
+      <select id="payment_method" class="form-select" name="payment_method" title="Selecciona un método de pago">
         <option value="CASH">Pagar en local / Efectivo</option>
-        <option disabled value="WEBPAY">Webpay (próximamente)</option>
-        <option disabled value="MERCADOPAGO">MercadoPago (próximamente)</option>
+        <option value="WEBPAY">Webpay</option>
       </select>
     </div>
 
@@ -248,39 +247,84 @@ document.getElementById('btn-clear').addEventListener('click',()=>{
 });
 
 // --- enviar pedido ---
-document.getElementById('f').addEventListener('submit',async e=>{
+document.getElementById('f').addEventListener('submit', async e => {
   e.preventDefault();
   const msg = document.getElementById('msg');
-  if(!cart.length){ msg.innerHTML='<div class="alert alert-warning">Tu carrito está vacío.</div>'; return; }
+  if (!cart.length) {
+    msg.innerHTML = '<div class="alert alert-warning">Tu carrito está vacío.</div>';
+    return;
+  }
 
   const fd = new FormData(e.target);
+  const payment_method = fd.get('payment_method');
   const body = {
-    name: fd.get('name'), phone: fd.get('phone') || '',
-    address: fd.get('address') || '', email: fd.get('email') || '',
-    payment_method: fd.get('payment_method'),
-    items: cart.map(i=>({product_name:i.product_name, qty:i.qty, unit_price:i.unit_price, subtotal:i.subtotal}))
+    name: fd.get('name'),
+    phone: fd.get('phone') || '',
+    address: fd.get('address') || '',
+    email: fd.get('email') || '',
+    payment_method,
+    items: cart.map(i => ({
+      product_name: i.product_name,
+      qty: i.qty,
+      unit_price: i.unit_price,
+      subtotal: i.subtotal
+    }))
   };
 
-  const r = await fetch('/api/public/orders/',{
-    method:'POST',
-    headers:{'Content-Type':'application/json','X-CSRFToken':fd.get('csrfmiddlewaretoken')},
-    body:JSON.stringify(body)
+  // 🟢 1️⃣ Crear la orden pendiente
+  const r = await fetch('/api/public/orders/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': fd.get('csrfmiddlewaretoken')
+    },
+    body: JSON.stringify(body)
   });
 
-  if(r.ok){
-    const order = await r.json();
-    cart = []; saveCart();
-    msg.innerHTML = `
-      <div class="alert alert-success text-center">
-        <h5>🎉 ¡Pedido enviado con éxito!</h5>
-        <p>N° de pedido: <strong>#${order.id}</strong></p>
-        <p>Estado: <span class="badge bg-secondary">${order.status}</span></p>
-        <div class="mt-2 fw-bold">Total: ${money(order.total_price)}</div>
-      </div>`;
-    document.getElementById('btn-submit').disabled = true;
-  } else {
-    msg.innerHTML = `<div class="alert alert-danger">Error al enviar el pedido</div>`;
+  if (!r.ok) {
+    msg.innerHTML = `<div class="alert alert-danger">Error al crear la orden</div>`;
+    return;
   }
+
+  const order = await r.json();
+
+  // 🟢 2️⃣ Si es Webpay, iniciar el pago
+  if (payment_method === 'WEBPAY') {
+    msg.innerHTML = `<div class="alert alert-info text-center">Redirigiendo a Webpay...</div>`;
+    const resp = await fetch(`/api/webpay/init/${order.id}/`);
+    const data = await resp.json();
+
+    if (data.url && data.token) {
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = data.url;
+
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'token_ws';
+      input.value = data.token;
+      form.appendChild(input);
+
+      document.body.appendChild(form);
+      form.submit();
+      return;
+    } else {
+      msg.innerHTML = `<div class="alert alert-danger">Error iniciando pago Webpay</div>`;
+      return;
+    }
+  }
+
+  // 🟢 3️⃣ Si es efectivo, mostrar confirmación inmediata
+  cart = [];
+  saveCart();
+  msg.innerHTML = `
+    <div class="alert alert-success text-center">
+      <h5>🎉 ¡Pedido enviado con éxito!</h5>
+      <p>N° de pedido: <strong>#${order.id}</strong></p>
+      <p>Estado: <span class="badge bg-secondary">${order.status}</span></p>
+      <div class="mt-2 fw-bold">Total: ${money(order.total_price)}</div>
+    </div>`;
+  document.getElementById('btn-submit').disabled = true;
 });
 </script>
 
