@@ -46,7 +46,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "cevicheria.urls"
+ROOT_URLCONF = "Cevicheria.urls"
 
 TEMPLATES = [
     {
@@ -63,8 +63,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "cevicheria.wsgi.application"
-ASGI_APPLICATION = "cevicheria.asgi.application"   
+WSGI_APPLICATION = "Cevicheria.wsgi.application"
+ASGI_APPLICATION = "Cevicheria.asgi.application"   
 
 
 DATABASES = {

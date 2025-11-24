@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -52,15 +52,106 @@
       from { opacity: 0; transform: translateY(15px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    /* BOLETA */
+    .boleta {
+      margin-top: 25px;
+      background: #f8fffe;
+      border: 2px dashed #00b894;
+      padding: 20px;
+      text-align: left;
+      border-radius: 14px;
+      font-size: 0.95rem;
+    }
+    .boleta h3 {
+      margin-bottom: 10px;
+      color: #009f7a;
+    }
+    .timer {
+      margin-top: 20px;
+      padding: 12px;
+      background: #e9fff7;
+      border-radius: 10px;
+      color: #006f5f;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
   </style>
 </head>
+
 <body>
+
   <div class="card">
     <div class="emoji">🎉</div>
     <h1>¡Pago procesado con éxito!</h1>
     <p>Gracias por tu compra 🦞</p>
     <p>Tu pedido ha sido confirmado y está en preparación.</p>
+
+    <!-- BOLETA -->
+    <div class="boleta" id="boleta">
+      <h3>🧾 Boleta electrónica</h3>
+
+      <p><b>Cliente:</b> <span id="b_name">Cargando...</span></p>
+      <p><b>Correo:</b> <span id="b_email">Cargando...</span></p>
+      <p><b>Pedido N°:</b> <span id="b_order">Cargando...</span></p>
+      <p><b>Fecha:</b> <span id="b_date"></span></p>
+
+      <hr>
+
+      <p><b>Total pagado:</b> <span id="b_total" style="color:#009f7a; font-size:1.2rem;"></span></p>
+    </div>
+
+    <!-- TIMER -->
+    <div class="timer" id="timer">
+      Pedido listo en <b>35:00</b>
+    </div>
+
     <a href="/" class="button">Volver al inicio</a>
   </div>
+
+  <script>
+    // ======================================================
+    //  RECONSTRUCCIÓN DE DATOS DE LA ORDEN DESDE SESSIONSTORAGE
+    // ======================================================
+
+    const order = JSON.parse(sessionStorage.getItem("lastOrder") || "{}");
+
+    document.getElementById("b_name").textContent = order.name || "—";
+    document.getElementById("b_email").textContent = order.email || "—";
+    document.getElementById("b_order").textContent = order.id || "—";
+    document.getElementById("b_total").textContent = "$" + (order.total_price || 0).toLocaleString("es-CL");
+
+    // FECHA
+    const f = new Date();
+    document.getElementById("b_date").textContent =
+      f.toLocaleDateString("es-CL") + " " + f.toLocaleTimeString("es-CL");
+
+    // ======================================================
+    // TIMER 35 MIN (COUNTDOWN)
+    // ======================================================
+    let minutos = 35;
+    let segundos = 0;
+
+    const timer = document.getElementById("timer");
+
+    const interval = setInterval(() => {
+
+      if (segundos === 0) {
+        minutos--;
+        segundos = 59;
+      } else {
+        segundos--;
+      }
+
+      timer.innerHTML = `Pedido listo en <b>${String(minutos).padStart(2,'0')}:${String(segundos).padStart(2,'0')}</b>`;
+
+      if (minutos <= 0 && segundos <= 0) {
+        clearInterval(interval);
+        timer.innerHTML = "<b style='color:#00b894'>Tu pedido debería estar listo ahora 🎉</b>";
+      }
+
+    }, 1000);
+  </script>
+
 </body>
 </html>

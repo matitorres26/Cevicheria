@@ -5,7 +5,7 @@ from channels.auth import AuthMiddlewareStack
 from django.urls import path
 from pedidos.consumers import OrdersConsumer
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cevicheria.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Cevicheria.settings")
 django.setup()
 
 django_asgi_app = get_asgi_application()

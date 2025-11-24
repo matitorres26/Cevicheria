@@ -36,7 +36,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "cevicheria.urls"
+ROOT_URLCONF = "Cevicheria.urls"
 
 TEMPLATES = [
     {
@@ -63,9 +63,9 @@ WEBPAY = {
 }
 
 
-# WSGI se deja por compatibilidad; Channels usa ASGI
-WSGI_APPLICATION = "cevicheria.wsgi.application"
-ASGI_APPLICATION = "cevicheria.asgi.application"   # 👈 clave
+
+WSGI_APPLICATION = "Cevicheria.wsgi.application"
+ASGI_APPLICATION = "Cevicheria.asgi.application"   # 👈 clave
 
 # ----- DB -----
 DATABASES = {

@@ -1,114 +1,170 @@
 {% extends "base.html" %}
-{% block title %}Menú - SOS Cevichería & Subhí{% endblock %}
+{% block title %}Menú - SOS Cevichería & Sushí{% endblock %}
 
 {% block content %}
 <style>
-/* ====== RESET Y TIPOGRAFÍA ====== */
-* {margin:0; padding:0; box-sizing:border-box;}
-body {font-family:'Poppins', sans-serif; color:#2d3748; background:#fefefe;}
+/* ====== RESET Y FUENTE ====== */
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Poppins',sans-serif;color:#2d3748;background:#fefefe;scroll-behavior:smooth;}
+img{max-width:100%;display:block;}
 
 /* ====== HERO ANIMADO CON BAMBU ====== */
-#inicio {position: relative; text-align:center; color:#fff; overflow:hidden;
-  background: linear-gradient(135deg,#00A699 0%,#0077B6 100%);
-  height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;}
-#inicio::before {content:''; position:absolute; top:0; left:0; width:100%; height:100%;
-  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect x="5" y="0" width="2" height="100" fill="%2300A699"/><rect x="25" y="0" width="2" height="100" fill="%2300A699"/><rect x="45" y="0" width="2" height="100" fill="%2300A699"/><rect x="65" y="0" width="2" height="100" fill="%2300A699"/><rect x="85" y="0" width="2" height="100" fill="%2300A699"/></svg>') repeat-x;
-  opacity:0.08; z-index:0; animation:bambooMove 20s linear infinite;}
-@keyframes bambooMove {0%{background-position-x:0;} 100%{background-position-x:200px;}}
-.logo-text { font-size:2rem; font-weight:700; color:#ff4040; text-transform:uppercase; letter-spacing:1px; z-index:1; position:relative; }
-nav {margin-top:30px; z-index:1; position:relative;}
-nav a {color:#fff; margin:0 15px; font-weight:500; text-decoration:none; position:relative; transition:0.3s;}
-nav a::after {content:''; position:absolute; width:0; height:2px; bottom:-5px; left:0; background:#2ecc71; transition:0.3s;}
-nav a:hover::after {width:100%;}
-nav a.btn {background:linear-gradient(90deg,#2ecc71,#27ae60); padding:12px 25px; border-radius:25px; font-weight:600; transition:0.3s;}
-nav a.btn:hover {transform:scale(1.05);}
-#inicio h1 {font-size:3rem; font-weight:800; text-shadow:2px 2px 8px rgba(0,0,0,0.3); margin-bottom:20px; animation:fadeIn 1.5s ease forwards; opacity:0; z-index:1; position:relative;}
-@keyframes fadeIn {0%{opacity:0; transform:translateY(20px);} 100%{opacity:1; transform:translateY(0);}}
-.btn-success, .btn-warning {border:none; border-radius:30px; padding:15px 35px; font-weight:600; letter-spacing:1px; text-transform:uppercase; transition:all 0.3s ease; z-index:1; position:relative;}
-.btn-success {background:linear-gradient(90deg,#2ecc71,#27ae60); color:#fff;}
-.btn-success:hover {transform:scale(1.1);}
-.btn-warning {background:linear-gradient(90deg,#f1c40f,#f39c12); color:#2d3748;}
-.btn-warning:hover {transform:scale(1.1);}
+#inicio{
+  position:relative;text-align:center;color:#fff;overflow:hidden;
+  background:linear-gradient(135deg,#00A699 0%,#0077B6 100%);
+  height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;
+}
+#inicio::before{
+  content:'';position:absolute;top:0;left:0;width:100%;height:100%;
+  background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect x="5" y="0" width="2" height="100" fill="%2300A699"/><rect x="25" y="0" width="2" height="100" fill="%2300A699"/><rect x="45" y="0" width="2" height="100" fill="%2300A699"/><rect x="65" y="0" width="2" height="100" fill="%2300A699"/><rect x="85" y="0" width="2" height="100" fill="%2300A699"/></svg>') repeat-x;
+  opacity:.08;z-index:0;animation:bambooMove 20s linear infinite;
+}
+@keyframes bambooMove{0%{background-position-x:0;}100%{background-position-x:200px;}}
+
+.logo-text{font-size:2.1rem;font-weight:700;color:#ff4040;text-transform:uppercase;letter-spacing:1px;z-index:1;position:relative;}
+nav{margin-top:30px;z-index:1;position:relative;}
+nav a{color:#fff;margin:0 15px;font-weight:500;text-decoration:none;position:relative;transition:0.3s;}
+nav a::after{content:'';position:absolute;width:0;height:2px;bottom:-5px;left:0;background:#2ecc71;transition:0.3s;}
+nav a:hover::after{width:100%;}
+nav a.btn{
+  background:linear-gradient(90deg,#2ecc71,#27ae60);
+  padding:12px 25px;border-radius:25px;font-weight:600;transition:0.3s;
+}
+nav a.btn:hover{transform:scale(1.05);}
+#inicio h1{
+  font-size:2.6rem;font-weight:800;text-shadow:2px 2px 8px rgba(0,0,0,0.3);
+  margin-bottom:20px;animation:fadeIn 1.5s ease forwards;opacity:0;z-index:1;position:relative;
+}
+@keyframes fadeIn{0%{opacity:0;transform:translateY(20px);}100%{opacity:1;transform:translateY(0);}}
+.btn-success,.btn-warning{
+  border:none;border-radius:30px;padding:15px 35px;font-weight:600;letter-spacing:1px;text-transform:uppercase;
+  transition:all 0.3s ease;z-index:1;position:relative;cursor:pointer;
+}
+.btn-success{background:linear-gradient(90deg,#2ecc71,#27ae60);color:#fff;}
+.btn-success:hover{transform:scale(1.08);}
+.btn-warning{background:linear-gradient(90deg,#f1c40f,#f39c12);color:#2d3748;}
+.btn-warning:hover{transform:scale(1.08);}
 
 /* ====== MENÚ ====== */
-#menu {padding:80px 0; background:#f9fafb;}
-#menu h2 {font-size:2.8rem; font-weight:700; color:#2d3748; border-bottom:4px solid #2ecc71; display:inline-block; padding-bottom:10px; margin-bottom:50px; letter-spacing:2px;}
-#products {display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:30px;}
-.card {background:#fff; border-radius:20px; overflow:hidden; box-shadow:0 10px 20px rgba(0,0,0,0.08); transition:transform 0.3s ease, box-shadow 0.3s ease; cursor:pointer; display:flex; flex-direction:column; justify-content:space-between;}
-.card:hover {transform:translateY(-10px) rotateX(2deg); box-shadow:0 15px 30px rgba(0,0,0,0.12);}
-.card-img-top {height:220px; object-fit:cover; border-top-left-radius:20px; border-top-right-radius:20px; transition:transform 0.3s;}
-.card-img-top:hover {transform:scale(1.05);}
-.card-body {padding:20px; text-align:center;}
-.card-title {font-size:1.4rem; font-weight:600; color:#2d3748; margin-bottom:10px;}
-.card-text {font-size:1.2rem; font-weight:500; color:#2ecc71; margin-bottom:15px;}
-.btn-outline-primary {border:2px solid #007bff; color:#007bff; border-radius:25px; padding:10px 25px; font-weight:600; transition:all 0.3s;}
-.btn-outline-primary:hover {background:#007bff; color:#fff; transform:scale(1.05);}
+#menu{padding:100px 0;background:#f9fafb;}
+#menu h2{
+  font-size:2.6rem;font-weight:700;color:#2d3748;border-bottom:4px solid #2ecc71;
+  display:inline-block;padding-bottom:10px;margin-bottom:60px;letter-spacing:1px;
+}
+.menu-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:35px;
+  justify-items:center;
+  align-items:start;
+  width:100%;
+}
+
+/* ====== TARJETAS ====== */
+.card{
+  background:#fff;border-radius:20px;overflow:hidden;
+  box-shadow:0 10px 25px rgba(0,0,0,0.08);
+  transition:transform 0.3s ease, box-shadow 0.3s ease;
+  cursor:pointer;display:flex;flex-direction:column;
+  width:100%;
+  max-width:360px;
+}
+.card:hover{transform:translateY(-10px);box-shadow:0 15px 35px rgba(0,0,0,0.12);}
+.card-img-top{height:220px;width:100%;object-fit:cover;transition:transform 0.4s ease;}
+.card:hover .card-img-top{transform:scale(1.06);}
+.card-body{padding:20px;text-align:center;}
+.card-title{font-size:1.3rem;font-weight:600;color:#2d3748;margin-bottom:8px;}
+.card-desc{font-size:0.95rem;color:#555;min-height:45px;margin-bottom:12px;}
+.card-text{font-size:1.2rem;font-weight:600;color:#2ecc71;margin-bottom:15px;}
+.btn-outline-primary{
+  border:2px solid #007bff;color:#007bff;border-radius:25px;
+  padding:10px 25px;font-weight:600;transition:0.3s;
+}
+.btn-outline-primary:hover{
+  background:#007bff;color:#fff;transform:scale(1.05);
+}
+
+/* ====== MODALES ====== */
+.modal-backdrop{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  display:none;justify-content:center;align-items:center;
+  background:rgba(0,0,0,0.5);z-index:9999;
+}
+.modal-backdrop.open{display:flex;}
+.modal-content{background:#fff;padding:24px;border-radius:16px;min-width:300px;max-width:520px;text-align:center;position:relative;}
+.modal-content .close{position:absolute;top:10px;right:16px;font-size:1.5rem;cursor:pointer;}
+.modal-fields{ text-align:left; margin-top:10px; }
 
 /* ====== FOOTER ====== */
-#contacto {padding:60px 0; background:#1a202c; color:#fff; text-align:center; border-top:5px solid #2ecc71;}
-#contacto h3 {font-size:1.8rem; color:#ffd700; margin-bottom:20px;}
-#contacto p {font-size:1.1rem; margin-bottom:10px;}
-#contacto a {color:#fff; font-size:1.6rem; margin:0 12px; transition:0.3s;}
-#contacto a:hover {color:#2ecc71; transform:scale(1.2);}
-
-/* MODAL CANTIDAD */
-#qtyModal {
-  position: fixed; top:0; left:0; width:100%; height:100%;
-  display:none; justify-content:center; align-items:center;
-  background: rgba(0,0,0,0.5); z-index:9999;
+#contacto{
+  padding:60px 0;background:#1a202c;color:#fff;text-align:center;
+  border-top:5px solid #2ecc71;
 }
-#qtyModal .modal-content {
-  background:#fff; padding:30px; border-radius:20px; text-align:center;
-  min-width:300px;
-}
-#qtyModal button {margin:0 10px; padding:10px 20px; border:none; border-radius:10px; font-size:1.2rem; cursor:pointer;}
-#qtyModal .close {position:absolute; top:10px; right:20px; font-size:1.5rem; cursor:pointer;}
 </style>
 
 <!-- HERO -->
 <section id="inicio">
   <div class="container d-flex flex-column align-items-center">
     <div class="d-flex align-items-center mb-4">
-      <img src="https://placehold.co/60x60/f83e3e/ffffff?text=SOS" alt="Logo" class="rounded-circle" style="height:60px;width:60px;">
+      <img src="https://placehold.co/60x60/f83e3e/ffffff?text=SOS" class="rounded-circle" style="height:60px;width:60px;">
       <h1 class="ms-3 logo-text">SOS CEVICHERÍA & SUSHÍ</h1>
     </div>
     <nav>
       <a href="#inicio">Inicio</a>
-      <a href="#index">Menú</a>
+      <a href="#menu">Menú</a>
       <a href="#promociones">Promociones</a>
       <a href="#nosotros">Nosotros</a>
       <a href="#pedido" class="btn">Pedir Ahora</a>
     </nav>
     <h1 class="display-4 fw-bold mt-5">¡Salvamos tu apetito!</h1>
-    <h1 class="display-4 fw-bold mt-5">Abierto : Lunes, Miercoles y jueves de 17 a 23 horas</h1>
+    <h2 class="fw-bold mt-2">Lunes, Miércoles y Jueves de 17:00 a 23:00 hrs</h2>
     <div class="mt-4">
-      <a href="#index" class="btn btn-success btn-lg scroll-btn me-2">Ver Menú</a>
+      <a href="#menu" class="btn btn-success btn-lg me-2">Ver Menú</a>
       <a href="#pedido" class="btn btn-warning btn-lg">Haz tu Pedido</a>
     </div>
   </div>
 </section>
 
-<!-- MENÚ -->
-<section id="menu" class="container py-5">
-  <h2 class="text-center fw-bold mb-5">Menú</h2>
-  <div id="products" class="row g-4"></div>
-  <div class="text-center mt-4">
+<!-- MENÚ CON 3 SECCIONES -->
+<section id="menu" class="container text-center">
+  <h2>Menú</h2>
+  
+  <h3 class="mt-5">Ceviches</h3>
+  <p></p>
+  <div id="ceviches" class="menu-grid"></div>
+  
+  <h3 class="mt-5">Promociones Sushi</h3>
+  <div id="sushi" class="menu-grid"></div>
+  
+  <h3 class="mt-5">Acompañamientos</h3>
+  <div id="otros" class="menu-grid"></div>
+  
+  <div class="text-center mt-5">
     <a href="/checkout/" class="btn btn-primary btn-lg">Ir al pedido</a>
   </div>
 </section>
 
 <!-- MODAL CANTIDAD -->
-<div id="qtyModal">
-  <div class="modal-content position-relative">
-    <span class="close" id="closeModal">&times;</span>
+<div id="qtyModal" class="modal-backdrop">
+  <div class="modal-content">
+    <span class="close" id="closeModal">×</span>
     <h3>Agregar al carrito</h3>
     <p id="modalProductName" class="fw-bold"></p>
-    <div class="d-flex justify-content-center align-items-center mt-3">
+    <div style="display:flex;justify-content:center;align-items:center;margin-top:12px;">
       <button id="decQty">−</button>
-      <span id="qtyValue" style="margin:0 15px; font-size:1.2rem;">1</span>
+      <span id="qtyValue" style="margin:0 15px;font-size:1.2rem;">1</span>
       <button id="incQty">+</button>
     </div>
     <button id="addToCartModal" class="btn btn-success mt-3">Agregar</button>
+  </div>
+</div>
+
+<!-- MODAL HANDROLL -->
+<div id="handrollModal" class="modal-backdrop">
+  <div class="modal-content">
+    <span class="close" id="closeHandrollModal">×</span>
+    <h3 class="fw-bold mb-2">Selecciona tu Hand Roll</h3>
+    <form id="handrollForm" class="modal-fields"></form>
   </div>
 </div>
 
@@ -116,70 +172,114 @@ nav a.btn:hover {transform:scale(1.05);}
 <footer id="contacto">
   <div class="row">
     <div class="col-12 col-md-6 mb-4">
-      <h3>Contacto</h3>
-      <p>📍 Av. del Sabor 123, Santiago</p>
-      <p>📞 +56 9 1234 5678</p>
-      <p>📧 contacto@soscevicheria.cl</p>
+z      <h3>Contacto</h3>
       <p>Lun. - Sáb: 11:00-23:00 | Dom: 12:00-23:00</p>
     </div>
     <div class="col-12 col-md-6">
       <h3>Síguenos</h3>
-      <div class="mt-3">
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-facebook"></i></a>
-        <a href="#"><i class="fab fa-tiktok"></i></a>
-      </div>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+      <a href="#"><i class="fab fa-facebook"></i></a>
+      <a href="#"><i class="fab fa-tiktok"></i></a>
     </div>
   </div>
 </footer>
 
 <script>
-// Scroll suave
-document.querySelectorAll('.scroll-btn').forEach(btn=>{
-  btn.addEventListener('click', e=>{
-    e.preventDefault();
-    const target = document.querySelector(btn.getAttribute('href'));
-    target.scrollIntoView({behavior:'smooth'});
+// --- Scroll suave ---
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
   });
 });
 
 // --- Carrito ---
 let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-function saveCart(){ localStorage.setItem('cart', JSON.stringify(cart)); }
-function money(n){ return '$' + Number(n || 0).toFixed(2); }
+function saveCart() { localStorage.setItem('cart', JSON.stringify(cart)); }
 
-// --- Render carrito ---
-function renderCart(){
-  // Se mantiene como en tu checkout
+// --- Detectar si es Handroll ---
+function isHandrollName(name) {
+  return /hand[\s-]?roll/i.test(name || '');
+}
+
+// --- Detectar categoría ---
+function detectCategory(prod) {
+  const cat = (prod.category || '').toString().toLowerCase();
+  const name = (prod.name || '').toString().toLowerCase();
+  
+  if (cat.includes('ceviche') || name.includes('ceviche')) return 'ceviche';
+  if (cat.includes('sushi') || name.includes('sushi') || name.includes('roll') || name.includes('promo')) return 'sushi';
+  return 'otros';
+}
+
+// --- Renderizar una sección ---
+function renderSection(containerId, items, allProducts) {
+  const html = items.map(p => {
+    const index = allProducts.indexOf(p);
+    return `
+      <div class="card">
+        <img src="${p.image_url || 'https://placehold.co/600x400'}" class="card-img-top" alt="${p.name}">
+        <div class="card-body">
+          <h5 class="card-title">${p.name}</h5>
+          <p class="card-desc">${p.description || ''}</p>
+          <p class="card-text">$${Number(p.price).toLocaleString()}</p>
+          <button class="btn btn-outline-primary btn-add" data-index="${index}">Agregar</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+  document.getElementById(containerId).innerHTML = html;
+}
+
+function renderProducts(list) {
+  const products = (list || []).filter(p => p.available !== false);
+  const cev = [], sus = [], oth = [];
+
+  products.forEach(p => {
+    const cat = detectCategory(p);
+    if (cat === 'ceviche') cev.push(p);
+    else if (cat === 'sushi') sus.push(p);
+    else oth.push(p);
+  });
+
+  renderSection('ceviches', cev, products);
+  renderSection('sushi', sus, products);
+  renderSection('otros', oth, products);
+
+  // Asignar eventos a botones
+  document.querySelectorAll('.btn-add').forEach(btn => {
+    btn.onclick = () => {
+      const i = parseInt(btn.dataset.index);
+      const prod = products[i];
+      if (isHandrollName(prod.name)) {
+        openHandrollModal();
+      } else {
+        openQtyModalForProduct(prod);
+      }
+    };
+  });
 }
 
 // --- Modal cantidad ---
-let selectedProduct = null;
-let selectedQty = 1;
+let selectedProduct = null, selectedQty = 1;
+const qtyModal = document.getElementById('qtyModal');
+const modalProductName = document.getElementById('modalProductName');
+const qtyValue = document.getElementById('qtyValue');
 
-function add(p){
-  selectedProduct = p;
+document.getElementById('incQty').onclick = () => { selectedQty++; qtyValue.textContent = selectedQty; };
+document.getElementById('decQty').onclick = () => { if (selectedQty > 1) selectedQty--; qtyValue.textContent = selectedQty; };
+document.getElementById('closeModal').onclick = () => qtyModal.classList.remove('open');
+
+function openQtyModalForProduct(prod) {
+  selectedProduct = prod;
   selectedQty = 1;
-  document.getElementById('modalProductName').textContent = p.name;
-  document.getElementById('qtyValue').textContent = selectedQty;
-  document.getElementById('qtyModal').style.display = 'flex';
+  modalProductName.textContent = `${prod.name} — $${Number(prod.price).toLocaleString()}`;
+  qtyValue.textContent = 1;
+  qtyModal.classList.add('open');
 }
 
-document.getElementById('incQty').addEventListener('click',()=>{
-  selectedQty++;
-  document.getElementById('qtyValue').textContent = selectedQty;
-});
-document.getElementById('decQty').addEventListener('click',()=>{
-  if(selectedQty>1) selectedQty--;
-  document.getElementById('qtyValue').textContent = selectedQty;
-});
-document.getElementById('closeModal').addEventListener('click',()=>{
-  document.getElementById('qtyModal').style.display = 'none';
-});
-
-// Confirmar y agregar al carrito
-document.getElementById('addToCartModal').addEventListener('click',()=>{
-  if(!selectedProduct) return;
+document.getElementById('addToCartModal').onclick = () => {
+  if (!selectedProduct) return;
   cart.push({
     product_name: selectedProduct.name,
     qty: selectedQty,
@@ -187,29 +287,77 @@ document.getElementById('addToCartModal').addEventListener('click',()=>{
     subtotal: selectedProduct.price * selectedQty
   });
   saveCart();
-  renderCart();
-  document.getElementById('qtyModal').style.display = 'none';
-  selectedProduct = null;
-  selectedQty = 1;
+  qtyModal.classList.remove('open');
+};
+
+// --- Modal Handroll ---
+const handrollOptions = [
+  { name: 'Handroll Kanikama (Queso,Cebollin)', price: 3000 },
+  { name: 'Handroll Pollo (Queso,Cebollin)', price: 3500 },
+  { name: 'Handroll Champiñón (Queso,Cebollin)', price: 3500 },
+  { name: 'Handroll Choclito (Queso,Cebollin)', price: 3000 },
+  { name: 'Handroll Palmito(Queso,Cebollin)', price: 3000 },
+  { name: 'Handroll Camarón (Queso,Cebollin)', price: 4000 },
+  { name: 'Handroll Salmón (Queso,Cebollin)', price: 4500 },
+];
+
+const handrollModal = document.getElementById('handrollModal');
+const handrollForm = document.getElementById('handrollForm');
+const closeHandrollModal = document.getElementById('closeHandrollModal');
+
+function buildHandrollForm() {
+  handrollForm.innerHTML = handrollOptions.map((opt, i) => `
+    <label style="display:block;margin:8px 0;">
+      <input type="radio" name="handrollType" value="${i}" ${i===0?'checked':''}>
+      ${opt.name} — <b>$${opt.price.toLocaleString()}</b>
+    </label>
+  `).join('') + `
+    <div style="margin-top:10px;">
+      <label>Cantidad:</label><br>
+      <input type="number" id="handrollQty" min="1" value="1" style="width:80px;text-align:center;">
+    </div>
+    <div style="margin-top:12px;">
+      <button type="submit" class="btn btn-success">Agregar</button>
+    </div>
+  `;
+}
+buildHandrollForm();
+
+function openHandrollModal() { handrollModal.classList.add('open'); }
+function closeHandroll() { handrollModal.classList.remove('open'); }
+closeHandrollModal.onclick = closeHandroll;
+window.addEventListener('click', e => {
+  if (e.target === handrollModal) closeHandroll();
+  if (e.target === qtyModal) qtyModal.classList.remove('open');
 });
 
-// --- Fetch de productos ---
-(async ()=>{
-  const r = await fetch('/api/products/');
-  const data = await r.json();
-  const html = (data||[]).filter(p=>p.available).map(p=>`
-    <div class="col-12 col-md-6 col-lg-4">
-      <div class="card h-100 shadow-sm text-center">
-       <img src="${p.image_url}" class="card-img-top" alt="${p.name}">
-        <div class="card-body">
-          <h5 class="card-title">${p.name}</h5>
-          <p class="card-text mb-2">$${p.price}</p>
-          <button class="btn btn-outline-primary" onclick='add(${JSON.stringify(p)})'>Agregar</button>
-        </div>
-      </div>
-    </div>
-  `).join('');
-  document.getElementById('products').innerHTML = html;
+handrollForm.addEventListener('submit', e => {
+  e.preventDefault();
+  const idx = parseInt(handrollForm.querySelector('input[name="handrollType"]:checked').value || 0);
+  const qty = Math.max(1, parseInt(document.getElementById('handrollQty').value || 1));
+  const chosen = handrollOptions[idx];
+  cart.push({ product_name: chosen.name, qty, unit_price: chosen.price, subtotal: chosen.price * qty });
+  saveCart();
+  closeHandroll();
+});
+
+// --- Cargar productos ---
+(async () => {
+  try {
+    const r = await fetch('/api/products/');
+    const data = await r.json();
+    const normalized = (data || []).map(p => ({ ...p, price: Number(p.price) || 0 }));
+    renderProducts(normalized);
+  } catch (err) {
+    console.error('Error al cargar productos:', err);
+    // Demo data
+    renderProducts([
+      { name: 'Ceviche Clásico', price: 7200, available: true, category: 'Ceviches' },
+      { name: 'Promo 10 Rollos', price: 12000, available: true, category: 'Sushi' },
+      { name: 'Papas Fritas', price: 2500, available: true, category: 'Acompañamientos' },
+      { name: 'Handroll Salmón', price: 4500, available: true, category: 'Handrolls' },
+    ]);
+  }
 })();
 </script>
 {% endblock %}

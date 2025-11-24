@@ -1,187 +1,254 @@
 {% extends "base.html" %}
-{% block title %}Tu pedido{% endblock %}
+{% block title %}Tu Pedido - SOS{% endblock %}
 {% block content %}
 
 <style>
-body {
-  font-family: 'Poppins', sans-serif;
-  background: #f9fafb;
-  color: #333;
-}
-
-/* ===== CONTENEDOR ===== */
-.pedido-container {
-  max-width: 900px;
-  margin: 2rem auto;
-  background: #fff;
-  border-radius: 20px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  padding: 2rem;
-  transition: all 0.2s ease;
-}
-
-/* ===== TÍTULO ===== */
-.pedido-container h1 {
-  text-align: center;
-  font-weight: 600;
-  color: #007b83;
-  margin-bottom: 1.5rem;
-}
-
-/* ===== TABLA ===== */
-.table {
-  border-collapse: separate;
-  border-spacing: 0 8px;
-}
-.table thead th {
-  background-color: #007b83;
-  color: #fff;
-  border: none;
-  font-weight: 500;
-}
-.table tbody tr {
-  background: #f6f8f9;
-  border-radius: 10px;
-}
-.table td, .table th {
-  padding: 12px;
-  vertical-align: middle;
-}
-.table .btn {
-  border-radius: 10px;
-}
-
-/* ===== FORMULARIO ===== */
-form label {
-  font-weight: 500;
-  margin-bottom: 0.3rem;
-}
-form input, form select {
-  border-radius: 12px;
-  border: 1px solid #ddd;
-  padding: 10px 14px;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-form input:focus, form select:focus {
-  border-color: #007b83;
-  box-shadow: 0 0 0 3px rgba(0,123,131,0.2);
-  outline: none;
-}
-
-/* ===== BOTONES ===== */
-.btn {
-  border-radius: 12px;
-  font-weight: 500;
-  transition: all 0.2s ease;
-}
-.btn-success {
-  background-color: #00b894;
-  border: none;
-}
-.btn-success:hover {
-  background-color: #009e7a;
-}
-.btn-outline-danger {
-  border-color: #ff7675;
-  color: #ff7675;
-}
-.btn-outline-danger:hover {
-  background-color: #ff7675;
-  color: #fff;
-}
-
-/* ===== ALERTAS ===== */
-.alert {
-  border-radius: 10px;
-  padding: 1rem;
-  font-size: 0.95rem;
-}
-.alert-success {
-  background-color: #e9f8f1;
-  color: #1e7e34;
-  border: 1px solid #b6e4c7;
-}
-.alert-warning {
-  background-color: #fff8e1;
-  border: 1px solid #ffe082;
-  color: #8d6e63;
-}
-.alert-danger {
-  background-color: #fdecea;
-  border: 1px solid #f5c6cb;
-  color: #a94442;
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-  .pedido-container {
-    padding: 1.5rem;
+  :root {
+    --sos-red: #FF2E2E;
+    --sos-orange: #FFA94D;
+    --sos-green: #3AB14D;
+    --sos-blue: #00D4FF;
+    --bambu: #92AC44;          /* TU COLOR OFICIAL */
+    --bambu-claro: #A8BF74;
+    --white: #FFFFFF;
+    --gray-50: #F9FAFB;
+    --gray-100: #F1F3F5;
+    --gray-300: #D1D5DB;
+    --gray-700: #374151;
+    --gray-900: #111827;
   }
-  table {
-    font-size: 0.9rem;
+
+  body {
+    font-family: "Inter", "Poppins", sans-serif;
+    background: linear-gradient(135deg, var(--white) 0%, var(--gray-50) 100%);
+    color: var(--gray-900);
   }
-  .btn {
-    font-size: 0.9rem;
+
+  .checkout-wrapper { 
+    max-width: 1000px; 
+    margin: 3rem auto; 
+    background: var(--white); 
+    border-radius: 1rem; 
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08); 
+    overflow: hidden; 
+    border: 1px solid var(--gray-100); 
+    animation: fadeIn 0.6s ease; 
   }
-}
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* HEADER CON TU COLOR #92AC44 */
+  .checkout-header { 
+    background: linear-gradient(90deg, var(--bambu), var(--bambu-claro)); 
+    color: var(--white); 
+    text-align: center; 
+    padding: 2.5rem 1rem; 
+  }
+  .checkout-header h1 { font-size: 2rem; font-weight: 800; margin: 0; letter-spacing: -0.5px; }
+  .checkout-header p { margin-top: 0.5rem; color: rgba(255,255,255,0.9); font-size: 1rem; }
+
+  .checkout-body { padding: 2rem 2.5rem; }
+
+  .cart-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; margin-bottom: 2rem; }
+  .cart-table th, .cart-table td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--gray-100); }
+  .cart-table thead { background: var(--gray-50); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.6px; color: var(--gray-700); }
+  .qty-controls { display: flex; align-items: center; gap: 0.5rem; }
+  .qty-btn { width: 28px; height: 28px; border: 1.5px solid var(--gray-300); border-radius: 50%; background: var(--white); color: var(--gray-900); font-weight: 700; cursor: pointer; transition: all 0.2s; }
+  .qty-btn:hover { background: var(--bambu); color: var(--white); border-color: var(--bambu); }
+  .price { font-weight: 600; color: var(--gray-900); }
+  .total-row { background: var(--gray-50); font-weight: 700; font-size: 1.1rem; }
+
+  form { display: flex; flex-direction: column; gap: 1.5rem; }
+  .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+  .form-group { display: flex; flex-direction: column; }
+  .form-group label { font-weight: 600; margin-bottom: 0.4rem; color: var(--gray-700); }
+  .form-group input, .form-group select { 
+    padding: 0.9rem 1rem; border-radius: 0.5rem; border: 1.5px solid var(--gray-300); 
+    background: var(--white); font-size: 1rem; transition: all 0.2s ease; 
+  }
+  .form-group input:focus, .form-group select:focus { 
+    border-color: var(--bambu); 
+    box-shadow: 0 0 0 3px rgba(146,172,68,0.2); 
+    outline: none; 
+  }
+
+  .btn-group { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-top: 1rem; }
+  .btn { padding: 0.9rem 2rem; border-radius: 0.6rem; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.25s ease; border: none; min-width: 180px; }
+  .btn-primary { background: var(--bambu); color: var(--white); }
+  .btn-primary:hover { background: var(--bambu-claro); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(146,172,68,0.4); }
+  .btn-secondary { background: var(--white); color: var(--bambu); border: 2px solid var(--bambu); }
+  .btn-secondary:hover { background: var(--bambu); color: var(--white); }
+
+  .alert { border-radius: 0.6rem; padding: 1rem 1.25rem; text-align: center; font-weight: 500; }
+  .alert-warning { background: #FFF4E5; color: #B45309; }
+  .alert-success { background: #ECFDF5; color: #065F46; }
+  .alert-danger { background: #FEF2F2; color: #991B1B; }
+
+  @media (max-width: 768px) { .checkout-body { padding: 1.5rem; } .btn { width: 100%; } }
 </style>
 
-<div class="pedido-container">
-  <h1>Tu pedido 🦞</h1>
+<div class="checkout-wrapper">
+  <div class="checkout-header">
+    <h1>Tu Pedido en SOS</h1>
+    <p>Salvamos tu apetito con estilo — completa tus datos y envíanos tu orden</p>
+  </div>
 
-  <!-- Carrito -->
-  <div id="cart" class="mb-4"></div>
-  <hr class="my-3">
+  <div class="checkout-body">
+    <div id="cart"></div>
 
-  <!-- Formulario -->
-  <form id="f" class="card card-body">
-    {% csrf_token %}
-    <div class="row">
-      <div class="col-md-6 mb-3">
-        <label>Nombre completo</label>
-        <input class="form-control" name="name" required placeholder="Ej: Juan Pérez">
+    <form id="f">
+      {% csrf_token %}
+      <div class="form-grid">
+        <div class="form-group"><label>Nombre completo*</label><input name="name" required placeholder="Ej: Juan Pérez"></div>
+        <div class="form-group"><label>Teléfono</label><input name="phone" placeholder="+56 9 1234 5678"></div>
+        <div class="form-group"><label>Correo electrónico</label><input type="email" name="email" placeholder="cliente@email.com"></div>
+        <div class="form-group full"><label>Dirección de entrega</label><input name="address" placeholder="Ej: Av. Costanera 123, Viña del Mar"></div>
+        <div class="form-group">
+          <label>Método de pago</label>
+          <select name="payment_method">
+            <option value="CASH">Pagar en local / Efectivo</option>
+            <option value="WEBPAY">Webpay</option>
+          </select>
+        </div>
       </div>
-      <div class="col-md-6 mb-3">
-        <label>Teléfono</label>
-        <input class="form-control" name="phone" placeholder="+56 9 1234 5678">
+
+      <div class="btn-group">
+        <button class="btn btn-primary" id="btn-submit" type="submit">Enviar Pedido</button>
+        <button class="btn btn-secondary" id="btn-clear" type="button">Vaciar Carrito</button>
       </div>
-    </div>
-    <div class="mb-3">
-      <label>Dirección de entrega</label>
-      <input class="form-control" name="address" placeholder="Ej: Av. Costanera 123, Viña del Mar">
-    </div>
-    <div class="mb-3">
-      <label>Correo electrónico</label>
-      <input type="email" class="form-control" name="email" placeholder="Ej: cliente@email.com">
-    </div>
-    <div class="mb-4">
-      <label for="payment_method">Método de pago</label>
-      <select id="payment_method" class="form-select" name="payment_method" title="Selecciona un método de pago">
-        <option value="CASH">Pagar en local / Efectivo</option>
-        <option value="WEBPAY">Webpay</option>
-      </select>
-    </div>
-
-    <div class="d-flex gap-3 justify-content-center">
-      <button class="btn btn-success px-4" id="btn-submit" type="submit">🦐 Enviar pedido</button>
-      <button class="btn btn-outline-danger px-4" id="btn-clear" type="button">🧺 Vaciar carrito</button>
-    </div>
-
-    <div id="msg" class="mt-4"></div>
-  </form>
+      <div id="msg"></div>
+    </form>
+  </div>
 </div>
 
+<!-- MODAL CON TU COLOR #92AC44 -->
+<div id="modalGracias" style="
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.55);
+  backdrop-filter:blur(10px);
+  z-index:9999;
+  justify-content:center;
+  align-items:center;
+  padding:1rem;
+  font-family:'Poppins', sans-serif;
+">
+  <div style="
+    background:#fff;
+    border-radius:20px;
+    max-width:430px;
+    width:100%;
+    overflow:hidden;
+    border:3px solid #92AC44;
+    box-shadow:0 25px 60px rgba(0,0,0,0.25);
+    animation:modalIn .35s ease-out;
+  ">
+    
+    <!-- HEADER -->
+    <div style="
+      background:linear-gradient(135deg,#6F8834,#92AC44);
+      color:white;
+      padding:1.8rem 1.4rem;
+      text-align:center;
+    ">
+      <h3 style="margin:0;font-size:1.7rem;font-weight:700;">Pedido Confirmado</h3>
+      <p style="margin:6px 0 0;opacity:0.9;font-size:1rem;">
+        N° <strong id="b_id_header"></strong>
+      </p>
+    </div>
+
+    <!-- CONTENIDO -->
+    <div style="padding:1.9rem 1.6rem;color:#374151;">
+      
+      <!-- TIMER -->
+      <div style="text-align:center;margin-bottom:1.6rem;">
+        <p style="margin:0;color:#166534;font-weight:700;font-size:0.95rem;">Tiempo estimado</p>
+        <p id="timerTexto" style="
+          margin:0.3rem 0 0;
+          font-size:2.1rem;
+          font-weight:800;
+          color:#92AC44;
+          letter-spacing:-1px;
+        ">35m 00s</p>
+      </div>
+
+      <!-- BOLETA -->
+      <div style="
+        background:#f9fafb;
+        border:1px solid #e5e7eb;
+        border-radius:12px;
+        padding:1.5rem;
+      ">
+        <p style="margin:0;font-weight:700;font-size:1.05rem;color:#111827;">Cevichería SOS</p>
+
+        <div style="margin-top:1.1rem;line-height:1.6;font-size:0.95rem;">
+          <p style="margin:0;"><strong>Cliente:</strong> <span id="b_nombre"></span></p>
+          <p style="margin:0;"><strong>Fecha:</strong> <span id="b_fecha"></span></p>
+          <div id="extra-info" style="margin-top:4px;"></div>
+        </div>
+
+        <!-- ITEMS -->
+        <table style="width:100%;margin:1.2rem 0;font-size:0.95rem;">
+          <tbody id="b_items"></tbody>
+        </table>
+
+        <!-- TOTAL -->
+        <div style="
+          border-top:3px double #92AC44;
+          padding-top:12px;
+          text-align:right;
+          font-size:1.25rem;
+          font-weight:800;
+        ">
+          TOTAL <span id="b_total" style="color:#92AC44;"></span>
+        </div>
+      </div>
+
+      <!-- BOTÓN -->
+      <button onclick="cerrarModalGracias()" style="
+        margin-top:1.7rem;
+        width:100%;
+        padding:1rem;
+        background:#92AC44;
+        color:white;
+        border:none;
+        border-radius:10px;
+        font-weight:700;
+        font-size:1rem;
+        cursor:pointer;
+        transition:0.2s ease;
+      " onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+        Volver al Menú
+      </button>
+      <button onclick="imprimirBoleta()" style="
+        margin-top:0.8rem;
+        width:100%;
+        padding:1rem;
+        background:#374151;
+        color:white;
+        border:none;
+        border-radius:10px;
+        font-weight:700;
+        font-size:1rem;
+        cursor:pointer;
+        transition:0.2s ease;
+      " onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+        Imprimir Boleta (PDF)
+      </button>
+    </div>
+  </div>
+
+<link href="https://rsms.me/inter/inter.css" rel="stylesheet">
+
 <script>
-// --- helpers ---
 let cart = JSON.parse(localStorage.getItem('cart') || '[]');
 function saveCart(){ localStorage.setItem('cart', JSON.stringify(cart)); }
-function money(n){ return '$' + Number(n || 0).toFixed(2); }
+function money(n){ return '$' + Number(n || 0).toLocaleString('es-CL'); }
 
-// --- render carrito ---
 function renderCart(){
   const wrap = document.getElementById('cart');
   if(!cart.length){
-    wrap.innerHTML = '<div class="alert alert-warning text-center">Tu carrito está vacío. Agrega productos desde el <a href="/">menú</a>.</div>';
+    wrap.innerHTML = '<div class="alert alert-warning">Tu carrito está vacío. Agrega productos desde el <a href="/">menú</a>.</div>';
     document.getElementById('btn-submit').disabled = true;
     return;
   }
@@ -194,38 +261,30 @@ function renderCart(){
     return `
       <tr>
         <td>${item.product_name}</td>
-        <td class="text-nowrap">
-          <button class="btn btn-sm btn-outline-secondary" data-act="dec" data-idx="${idx}">−</button>
-          <span class="mx-2">${item.qty}</span>
-          <button class="btn btn-sm btn-outline-secondary" data-act="inc" data-idx="${idx}">+</button>
+        <td>
+          <div class="qty-controls">
+            <button class="qty-btn" data-act="dec" data-idx="${idx}">−</button>
+            <span class="qty-value">${item.qty}</span>
+            <button class="qty-btn" data-act="inc" data-idx="${idx}">+</button>
+          </div>
         </td>
-        <td class="text-end">${money(item.unit_price)}</td>
-        <td class="text-end fw-semibold">${money(subtotal)}</td>
-        <td class="text-end">
-          <button class="btn btn-sm btn-outline-danger" data-act="del" data-idx="${idx}">Eliminar</button>
-        </td>
+        <td class="price">${money(item.unit_price)}</td>
+        <td class="price">${money(subtotal)}</td>
+        <td><button class="btn btn-secondary btn-sm" data-act="del" data-idx="${idx}">Eliminar</button></td>
       </tr>`;
   }).join('');
 
   wrap.innerHTML = `
     <div class="table-responsive">
-      <table class="table align-middle">
+      <table class="cart-table">
         <thead><tr>
-          <th>Producto</th>
-          <th style="width:160px">Cantidad</th>
-          <th class="text-end">Precio</th>
-          <th class="text-end">Subtotal</th>
-          <th class="text-end">Acción</th>
+          <th>Producto</th><th>Cantidad</th><th>Precio</th><th>Subtotal</th><th>Acción</th>
         </tr></thead>
         <tbody>${rows}</tbody>
-        <tfoot><tr>
-          <th colspan="3" class="text-end">Total:</th>
-          <th class="text-end h5">${money(total)}</th>
-          <th></th>
-        </tr></tfoot>
+        <tfoot><tr class="total-row"><td colspan="3" class="text-end">Total</td><td>${money(total)}</td><td></td></tr></tfoot>
       </table>
     </div>`;
-  
+
   wrap.querySelectorAll('button[data-act]').forEach(btn=>{
     btn.addEventListener('click',e=>{
       const i = Number(e.currentTarget.dataset.idx);
@@ -239,93 +298,244 @@ function renderCart(){
 }
 renderCart();
 
-// --- limpiar carrito ---
-document.getElementById('btn-clear').addEventListener('click',()=>{
+document.getElementById('btn-clear').addEventListener('click',()=>{ 
   if(cart.length && confirm('¿Vaciar carrito?')){
-    cart = []; saveCart(); renderCart();
-  }
+    cart=[]; saveCart(); renderCart(); 
+  } 
 });
 
-// --- enviar pedido ---
 document.getElementById('f').addEventListener('submit', async e => {
   e.preventDefault();
   const msg = document.getElementById('msg');
-  if (!cart.length) {
-    msg.innerHTML = '<div class="alert alert-warning">Tu carrito está vacío.</div>';
-    return;
+  if (!cart.length) { 
+    msg.innerHTML = '<div class="alert alert-warning">Tu carrito está vacío.</div>'; 
+    return; 
   }
 
   const fd = new FormData(e.target);
   const payment_method = fd.get('payment_method');
   const body = {
-    name: fd.get('name'),
-    phone: fd.get('phone') || '',
-    address: fd.get('address') || '',
-    email: fd.get('email') || '',
+    name: fd.get('name'), phone: fd.get('phone')||'', address: fd.get('address')||'', email: fd.get('email')||'',
     payment_method,
-    items: cart.map(i => ({
-      product_name: i.product_name,
-      qty: i.qty,
-      unit_price: i.unit_price,
-      subtotal: i.subtotal
-    }))
+    items: cart.map(i => ({ product_name: i.product_name, qty: i.qty, unit_price: i.unit_price, subtotal: i.subtotal }))
   };
 
-  // 🟢 1️⃣ Crear la orden pendiente
-  const r = await fetch('/api/public/orders/', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRFToken': fd.get('csrfmiddlewaretoken')
-    },
-    body: JSON.stringify(body)
+  const r = await fetch('/api/public/orders/', { 
+    method:'POST',
+    headers:{'Content-Type':'application/json','X-CSRFToken':fd.get('csrfmiddlewaretoken')}, 
+    body:JSON.stringify(body) 
   });
 
-  if (!r.ok) {
-    msg.innerHTML = `<div class="alert alert-danger">Error al crear la orden</div>`;
-    return;
+  if (!r.ok) { 
+    msg.innerHTML = `<div class="alert alert-danger">Error al crear la orden</div>`; 
+    return; 
   }
 
   const order = await r.json();
 
-  // 🟢 2️⃣ Si es Webpay, iniciar el pago
   if (payment_method === 'WEBPAY') {
-    msg.innerHTML = `<div class="alert alert-info text-center">Redirigiendo a Webpay...</div>`;
     const resp = await fetch(`/api/webpay/init/${order.id}/`);
     const data = await resp.json();
-
     if (data.url && data.token) {
       const form = document.createElement('form');
       form.method = 'POST';
       form.action = data.url;
-
       const input = document.createElement('input');
       input.type = 'hidden';
       input.name = 'token_ws';
       input.value = data.token;
       form.appendChild(input);
-
       document.body.appendChild(form);
       form.submit();
-      return;
-    } else {
-      msg.innerHTML = `<div class="alert alert-danger">Error iniciando pago Webpay</div>`;
       return;
     }
   }
 
-  // 🟢 3️⃣ Si es efectivo, mostrar confirmación inmediata
-  cart = [];
-  saveCart();
-  msg.innerHTML = `
-    <div class="alert alert-success text-center">
-      <h5>🎉 ¡Pedido enviado con éxito!</h5>
-      <p>N° de pedido: <strong>#${order.id}</strong></p>
-      <p>Estado: <span class="badge bg-secondary">${order.status}</span></p>
-      <div class="mt-2 fw-bold">Total: ${money(order.total_price)}</div>
-    </div>`;
+  llenarBoleta(order);
+  document.getElementById('modalGracias').style.display = 'flex';
+
+  // 🔥 Usa el tiempo dinámico
+  iniciarTimerEntrega();
+
+  cart = []; saveCart(); renderCart();
+  msg.innerHTML = `<div class="alert alert-success">¡Pedido #${order.id} enviado con éxito!</div>`;
   document.getElementById('btn-submit').disabled = true;
 });
+
+function cerrarModalGracias() { window.location.href = "/"; }
+
+//
+// =====================================================
+//  🔥 NUEVO: TIEMPO DINÁMICO (hora + carga de pedidos)
+// =====================================================
+//
+
+async function calcularTiempoEstimado() {
+  // 1) Consultar pedidos activos
+  const r = await fetch('/api/public/orders/active-count/');
+  const data = await r.json();
+  const pedidosActivos = data.count || 0;
+
+  // 2) Hora actual
+  const ahora = new Date();
+  const hora = ahora.getHours();
+
+  // 3) Base de tiempo
+  let tiempoBase = 25;
+
+  // 4) Hora punta
+  const horaPunta = (
+    (hora >= 12 && hora <= 15) ||
+    (hora >= 19 && hora <= 21)
+  );
+
+  if (horaPunta) tiempoBase = 30;
+
+  // 5) Carga de pedidos
+  let extra = 0;
+
+  if (pedidosActivos <= 5) extra = pedidosActivos;
+  else if (pedidosActivos <= 15) extra = 10 + (pedidosActivos - 6);
+  else extra = 25;
+
+  let total = tiempoBase + extra;
+
+  // 6) Límites
+  if (total < 20) total = 20;
+  if (total > 55) total = 55;
+
+  return total;
+}
+
+async function iniciarTimerEntrega() {
+  const minutosEstimados = await calcularTiempoEstimado();
+  let minutos = minutosEstimados;
+  let segundos = 0;
+
+  const texto = document.getElementById('timerTexto');
+  texto.innerHTML = `${minutos}m 00s`;
+
+  const interval = setInterval(() => {
+    if (segundos === 0) {
+      if (minutos === 0) {
+        clearInterval(interval);
+        texto.innerHTML = "¡Listo!";
+        return;
+      }
+      minutos--;
+      segundos = 59;
+    } else {
+      segundos--;
+    }
+
+    texto.innerHTML = `${minutos}m ${segundos.toString().padStart(2, "0")}s`;
+  }, 1000);
+}
+
+//
+// =====================================================
+//  BOLETA (sin cambios)
+// =====================================================
+//
+
+function llenarBoleta(order) {
+  const fecha = new Date().toLocaleString("es-CL");
+  document.getElementById("b_id_header").textContent = order.id;
+  document.getElementById("b_nombre").textContent = order.name;
+  document.getElementById("b_fecha").textContent = fecha;
+  document.getElementById("b_total").textContent = money(order.total_price);
+
+  let extra = "";
+  if (order.phone) extra += `<p style="margin:0;"><strong>Teléfono:</strong> ${order.phone}</p>`;
+  if (order.address && order.address.trim()) extra += `<p style="margin:0;"><strong>Dirección:</strong> ${order.address}</p>`;
+  else extra += `<p style="margin:0;"><strong>Retiro en local</strong></p>`;
+  document.getElementById("extra-info").innerHTML = extra;
+
+  let html = "";
+  order.items.forEach(i => {
+    html += `<tr>
+      <td style="padding:6px 0;">${i.qty}×</td>
+      <td style="padding:6px 0;">${i.product_name}</td>
+      <td style="text-align:right; padding:6px 0;">${money(i.subtotal)}</td>
+    </tr>`;
+  });
+  document.getElementById("b_items").innerHTML = html;
+}
+
+function imprimirBoleta() {
+  const boleta = `
+    <html>
+      <head>
+        <title>Boleta</title>
+        <style>
+          body {
+            font-family: 'Poppins', sans-serif;
+            padding: 20px;
+            color: #333;
+          }
+          .box {
+            border: 2px solid #92AC44;
+            border-radius: 12px;
+            padding: 20px;
+            background: #f9fafb;
+          }
+          h2 {
+            margin-top: 0;
+            text-align: center;
+            color: #92AC44;
+          }
+          table {
+            width:100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+          }
+          td {
+            padding: 8px 4px;
+            border-bottom: 1px solid #ddd;
+          }
+          .total {
+            margin-top: 20px;
+            text-align: right;
+            font-size: 1.3rem;
+            font-weight: 800;
+            color:#92AC44;
+          }
+        </style>
+      </head>
+      <body>
+
+        <h2>Boleta de Compra</h2>
+
+        <div class="box">
+          <p><strong>Pedido N°:</strong> ${document.getElementById("b_id_header").innerText}</p>
+          <p><strong>Cliente:</strong> ${document.getElementById("b_nombre").innerText}</p>
+          <p><strong>Fecha:</strong> ${document.getElementById("b_fecha").innerText}</p>
+
+          <h3 style="margin-top:20px;">Detalles</h3>
+
+          <table>
+            ${document.getElementById("b_items").innerHTML}
+          </table>
+
+          <div class="total">
+            TOTAL: ${document.getElementById("b_total").innerText}
+          </div>
+        </div>
+
+      </body>
+    </html>
+  `;
+
+  const ventana = window.open('', '_blank');
+  ventana.document.write(boleta);
+  ventana.document.close();
+
+  setTimeout(() => {
+    ventana.print();
+    ventana.close();
+  }, 400);
+}
 </script>
+
 
 {% endblock %}

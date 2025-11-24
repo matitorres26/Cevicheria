@@ -194,3 +194,7 @@ def webpay_commit_transaction(request):
     except Exception as e:
         print("❌ Error en commit Webpay:", e)
         return JsonResponse({"error": str(e)}, status=400)
+
+def active_orders_count(request):
+    count = Order.objects.filter(status__in=["PENDIENTE", "PREPARANDO"]).count()
+    return JsonResponse({"count": count})

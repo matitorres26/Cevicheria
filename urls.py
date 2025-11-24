@@ -40,7 +40,7 @@ urlpatterns = [
     path("api/public/orders/", PublicOrderCreateView.as_view(), name="public-order-create"),
 
     # Páginas HTML  (Bootstrap)
-    path("", TemplateView.as_view(template_name="index.html"), name="home"),        
+    path("index/", TemplateView.as_view(template_name="index.html"), name="home"),        
     path("nuevo/", TemplateView.as_view(template_name="order_new.html"), name="nuevo"),  
     path("menu/", TemplateView.as_view(template_name="menu.html"), name="menu"),
     path("checkout/", TemplateView.as_view(template_name="checkout.html"), name="checkout"),

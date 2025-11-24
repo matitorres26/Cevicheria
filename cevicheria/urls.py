@@ -7,6 +7,9 @@ from django.views.generic import TemplateView
 from django.conf import settings
 from django.conf.urls.static import static
 from pedidos.views import webpay_init_transaction, webpay_commit_transaction
+from pedidos.views import active_orders_count
+
+
 # Rutas API REST
 router = DefaultRouter()
 router.register(r"customers", CustomerViewSet)
@@ -36,7 +39,9 @@ urlpatterns = [
 
 
     path("pago-finalizado/", TemplateView.as_view(template_name="pago_finalizado.html")),  
-    path("pago-fallido/", TemplateView.as_view(template_name="pago_fallido.html")),        
+    path("pago-fallido/", TemplateView.as_view(template_name="pago_fallido.html")),
+    path("api/public/orders/active-count/", active_orders_count, name="active-orders-count"),
+        
 
 ]
 if settings.DEBUG:
