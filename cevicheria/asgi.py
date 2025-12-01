@@ -1,20 +1,20 @@
-import os, django
+import os
 from django.core.asgi import get_asgi_application
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
-from django.urls import path
-from pedidos.consumers import OrdersConsumer
+import django
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Cevicheria.settings")
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Cevicheria.settings')
+
+# 👇 Esto es CLAVE para evitar el error
 django.setup()
 
-django_asgi_app = get_asgi_application()
-
-websocket_urlpatterns = [
-    path("ws/orders/", OrdersConsumer.as_asgi()),
-]
+# Solo después de setup() podemos importar routing
+from pedidos.routing import websocket_urlpatterns
 
 application = ProtocolTypeRouter({
-    "http": django_asgi_app,                                # HTTP normal
-    "websocket": AuthMiddlewareStack(URLRouter(websocket_urlpatterns)),  # WebSocket
+    "http": get_asgi_application(),
+    "websocket": AuthMiddlewareStack(
+        URLRouter(websocket_urlpatterns)
+    ),
 })

@@ -1,3 +1,5 @@
+from datetime import timedelta
+from django.shortcuts import redirect, render
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
 from rest_framework.generics import CreateAPIView
@@ -177,7 +179,7 @@ def webpay_commit_transaction(request):
             )
 
             print(f"✅ Pedido #{order.id} pagado correctamente y notificado.")
-            return HttpResponseRedirect("/pago-finalizado/")
+            return HttpResponseRedirect(f"/pago-finalizado/?order_id={order.id}")
 
         # Caso fallido o rechazado
         else:
@@ -194,7 +196,37 @@ def webpay_commit_transaction(request):
     except Exception as e:
         print("❌ Error en commit Webpay:", e)
         return JsonResponse({"error": str(e)}, status=400)
+    
+def pago_finalizado(request):
+    order_id = request.GET.get("order_id")
+
+    if not order_id:
+        return redirect("/")
+
+    order = (
+        Order.objects
+        .select_related("customer")
+        .prefetch_related("items")
+        .filter(id=order_id)
+        .first()
+    )
+
+    if not order:
+        return redirect("/")
+
+    # === Cálculo ETA ===
+    from pedidos.consumers import calcular_tiempo_estimado
+    eta_minutes = calcular_tiempo_estimado()
+    ready_at = order.created_at + timedelta(minutes=eta_minutes)
+
+    return render(request, "pago_finalizado.html", {
+        "order": order,
+        "items": order.items.all(),
+        "eta_minutes": eta_minutes,
+        "ready_at": ready_at,
+    })
 
 def active_orders_count(request):
-    count = Order.objects.filter(status__in=["PENDIENTE", "PREPARANDO"]).count()
+    count = Order.objects.filter(status__in=["NEW", "IN_PROGRESS"]).count()
     return JsonResponse({"count": count})
+

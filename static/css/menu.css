@@ -1,0 +1,339 @@
+/* ============================
+   RESET & BASE
+============================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background: #fefefe;
+  color: #2d3748;
+  scroll-behavior: smooth;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ============================
+   HERO
+============================ */
+#inicio.hero {
+  position: relative;
+  height: 100vh;
+  background: linear-gradient(135deg, #00a699 0%, #0077b6 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+}
+
+/* Fondo animado */
+#inicio::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='5' y='0' width='2' height='100' fill='%2300A699'/><rect x='25' y='0' width='2' height='100' fill='%2300A699'/><rect x='45' y='0' width='2' height='100' fill='%2300A699'/><rect x='65' y='0' width='2' height='100' fill='%2300A699'/><rect x='85' y='0' width='2' height='100' fill='%2300A699'/></svg>")
+    repeat-x;
+  opacity: 0.07;
+  animation: bambooMove 18s linear infinite;
+}
+
+@keyframes bambooMove {
+  from { background-position-x: 0; }
+  to   { background-position-x: 200px; }
+}
+
+/* Contenido */
+.hero-content {
+  z-index: 5;
+}
+
+.logo-text {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ff4040;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* NAV */
+.hero-nav {
+  margin-top: 25px;
+}
+
+.hero-nav a {
+  color: #fff;
+  margin: 0 15px;
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  transition: 0.3s;
+}
+
+.hero-nav a::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  left: 0;
+  bottom: -5px;
+  background: #2ecc71;
+  transition: width 0.3s;
+}
+
+.hero-nav a:hover::after {
+  width: 100%;
+}
+
+/* Botón nav */
+.hero-btn {
+  background: linear-gradient(90deg, #2ecc71, #27ae60);
+  padding: 12px 25px;
+  border-radius: 25px;
+  font-weight: 600;
+}
+
+.hero-title {
+  font-size: 2.7rem;
+  font-weight: 800;
+  color: #fff;
+  margin-top: 40px;
+  animation: fadeIn 1.2s ease forwards;
+  opacity: 0;
+}
+
+.hero-subtitle {
+  color: #fff;
+  text-shadow: 0 1px 5px rgba(0,0,0,0.3);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Botones */
+.btn-success,
+.btn-warning {
+  padding: 14px 32px;
+  border-radius: 28px;
+  text-transform: uppercase;
+  font-weight: 600;
+  transition: transform 0.25s;
+  border: none;
+}
+
+.btn-success {
+  background: linear-gradient(90deg, #2ecc71, #27ae60);
+  color: #fff;
+}
+
+.btn-warning {
+  background: linear-gradient(90deg, #f1c40f, #f39c12);
+  color: #2d3748;
+}
+
+.btn-success:hover,
+.btn-warning:hover {
+  transform: scale(1.08);
+}
+
+/* ============================
+   MENÚ
+============================ */
+.menu-section {
+  padding: 80px 0;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  border-bottom: 4px solid #2ecc71;
+  display: inline-block;
+  padding-bottom: 10px;
+  margin-bottom: 50px;
+}
+
+.category-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 30px;
+  justify-items: center;
+}
+
+/* ============================
+   CARDS
+============================ */
+.card {
+  width: 100%;
+  max-width: 350px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  cursor: pointer;
+  transition: 0.25s;
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+}
+
+.card-img-top {
+  height: 210px;
+  object-fit: cover;
+  transition: 0.35s;
+}
+
+.card:hover .card-img-top {
+  transform: scale(1.06);
+}
+
+.card-body {
+  padding: 20px;
+  text-align: center;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.card-desc {
+  font-size: 0.95rem;
+  color: #666;
+  min-height: 45px;
+  margin: 10px 0;
+}
+
+.card-text {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #2ecc71;
+  margin-bottom: 15px;
+}
+
+.btn-outline-primary {
+  border: 2px solid #007bff;
+  border-radius: 25px;
+  padding: 10px 25px;
+  font-weight: 600;
+  color: #007bff;
+  transition: 0.25s;
+}
+
+.btn-outline-primary:hover {
+  background: #007bff;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+/* ============================
+   MODALES
+============================ */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-backdrop.open {
+  display: flex;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 25px;
+  border-radius: 16px;
+  width: 95%;
+  max-width: 420px;
+  text-align: center;
+  position: relative;
+  animation: zoomIn 0.25s ease;
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+.close {
+  position: absolute;
+  right: 14px;
+  top: 10px;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.qty-controller {
+  display: flex;
+  gap: 15px;
+}
+
+.qty-btn {
+  width: 35px;
+  height: 35px;
+  background: #f1f3f5;
+  border: none;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.qty-btn:hover {
+  background: #2ecc71;
+  color: white;
+}
+
+.qty-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+/* ============================
+   FOOTER
+============================ */
+.footer-section {
+  padding: 60px 0;
+  background: #1a202c;
+  color: #fff;
+  text-align: center;
+  border-top: 5px solid #2ecc71;
+}
+
+.footer-column h3 {
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.social-icons a {
+  color: #fff;
+  margin: 0 10px;
+  font-size: 1.4rem;
+  transition: 0.25s;
+}
+
+.social-icons a:hover {
+  color: #2ecc71;
+}

@@ -9,7 +9,7 @@ from django.conf.urls.static import static
 from pedidos.views import webpay_init_transaction, webpay_commit_transaction
 from pedidos.views import active_orders_count
 
-
+from pedidos.views import pago_finalizado
 # Rutas API REST
 router = DefaultRouter()
 router.register(r"customers", CustomerViewSet)
@@ -36,7 +36,7 @@ urlpatterns = [
 
     path("api/webpay/init/<int:order_id>/", webpay_init_transaction, name="webpay-init"),
     path("api/webpay/return/", webpay_commit_transaction, name="webpay-return"),
-
+    path("pago-finalizado/", pago_finalizado, name="pago-finalizado"),
 
     path("pago-finalizado/", TemplateView.as_view(template_name="pago_finalizado.html")),  
     path("pago-fallido/", TemplateView.as_view(template_name="pago_fallido.html")),

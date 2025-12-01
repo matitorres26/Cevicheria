@@ -1,0 +1,54 @@
+body {
+  background: #fff5f5;
+  font-family: "Poppins", sans-serif;
+}
+
+.fail-wrapper {
+  display: flex;
+  justify-content: center;
+  padding-top: 100px;
+}
+
+.fail-card {
+  background: #ffffff;
+  padding: 40px 50px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 480px;
+  text-align: center;
+  animation: fadeIn .45s ease;
+}
+
+.fail-card h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #e74c3c;
+}
+
+.msg {
+  font-size: 1.1rem;
+  color: #444;
+  margin: 12px 0;
+}
+
+.btn-volver {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 14px 30px;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 12px;
+  background: #e74c3c;
+  color: white;
+  transition: .2s ease;
+}
+
+.btn-volver:hover {
+  background: #c0392b;
+}
+
+/* Animación */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

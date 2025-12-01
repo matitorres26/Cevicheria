@@ -1,148 +1,19 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Pedidos del Día - SOS{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+{% endblock %}
+
 {% block content %}
-<style>
-body {
-  font-family: 'Poppins', sans-serif;
-  background-color: #f5f6fa;
-}
 
-h1 {
-  font-weight: 600;
-  text-align: center;
-  color: #2c3e50;
-  margin-bottom: 1.5rem;
-}
+<h1 class="titulo-pedidos">📦 Pedidos de Hoy</h1>
+<div id="orders" class="orders-grid"></div>
 
-#orders {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1.5rem;
-}
+{% endblock %}
 
-/* Tarjeta de pedido */
-.card {
-  border: none;
-  border-radius: 16px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  background: white;
-  overflow: hidden;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
-}
-
-.card-body {
-  padding: 1.5rem;
-}
-
-.card-title {
-  color: #34495e;
-  font-weight: 600;
-}
-
-.badge {
-  font-size: 0.85rem;
-  padding: 0.45rem 0.7rem;
-  border-radius: 12px;
-}
-
-.text-muted {
-  font-size: 0.9rem;
-}
-
-ul {
-  list-style-type: none;
-  padding-left: 0;
-  margin-bottom: 1rem;
-}
-
-li {
-  background: #f9f9f9;
-  margin-bottom: 6px;
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  color: #2f3640;
-}
-
-/* Total */
-strong {
-  color: #27ae60;
-  font-size: 1.05rem;
-}
-
-/* Animación al cargar pedidos */
-.fade-in {
-  animation: fadeIn 0.5s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-</style>
-
-<h1>📦 Pedidos de Hoy</h1>
-<div id="orders" class="row g-3"></div>
-
-<script>
-async function loadOrders() {
-  const r = await fetch('/api/orders/');
-  const data = await r.json();
-  const wrap = document.getElementById('orders');
-  wrap.innerHTML = (data || []).map(o => `
-    <div class="col-12 col-md-5 col-lg-4 fade-in">
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <h5 class="card-title mb-0">🧾 ORDEN #${o.id}</h5>
-            <span class="badge ${getStatusClass(o.status)}">${o.status}</span>
-          </div>
-          <p class="text-muted mb-2">👤 Cliente: <strong>${o.customer}</strong></p>
-          <ul class="mb-3">
-            ${(o.items || []).map(i => `
-              <li>${i.qty}× ${i.product_name} — <strong>$${i.subtotal}</strong></li>
-            `).join('')}
-          </ul>
-          <div class="text-end">
-            <strong>Total: $${o.total_price}</strong>
-          </div>
-        </div>
-      </div>
-    </div>
-  `).join('');
-}
-
-function getStatusClass(status){
-  switch(status.toLowerCase()){
-    case 'pendiente': return 'bg-warning text-dark';
-    case 'en preparación': return 'bg-info text-dark';
-    case 'listo': return 'bg-success';
-    case 'entregado': return 'bg-secondary';
-    default: return 'bg-dark';
-  }
-}
-
-loadOrders();
-
-// ---------- WebSocket tiempo real ----------
-const wsScheme = location.protocol === "https:" ? "wss" : "ws";
-const ws = new WebSocket(`${wsScheme}://${location.host}/ws/orders/`);
-
-ws.onopen = () => console.log("🔌 WebSocket conectado");
-ws.onmessage = (e) => {
-  try {
-    const data = JSON.parse(e.data);
-    if (data.type === "new_order") {
-      console.log("📦 Nuevo pedido recibido:", data.order_id);
-      loadOrders();
-    }
-  } catch (err) {
-    console.error("Error procesando mensaje WS:", err);
-  }
-};
-ws.onclose = () => console.warn("⚠️ WebSocket desconectado");
-</script>
+{% block extra_js %}
+<script src="{% static 'js/index.js' %}" defer></script>
 {% endblock %}

@@ -1,59 +1,30 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pago fallido</title>
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: #fff5f5;
-      text-align: center;
-      padding-top: 80px;
-      color: #333;
-    }
-    .card {
-      display: inline-block;
-      background: #fff;
-      padding: 40px 60px;
-      border-radius: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      animation: fadeIn 0.5s ease;
-    }
-    h1 {
-      color: #e74c3c;
-      font-size: 2rem;
-    }
-    p {
-      margin: 15px 0;
-      font-size: 1.1rem;
-    }
-    a {
-      display: inline-block;
-      margin-top: 20px;
-      text-decoration: none;
-      background: #e74c3c;
-      color: #fff;
-      padding: 12px 28px;
-      border-radius: 10px;
-      font-weight: bold;
-      transition: background 0.2s ease;
-    }
-    a:hover {
-      background: #c0392b;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
-</head>
-<body>
-  <div class="card">
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Pago fallido - SOS{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pago_fallido.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="fail-wrapper">
+  <div class="fail-card shadow-sm">
+
     <h1>❌ Pago rechazado</h1>
-    <p>Tu pago no pudo ser procesado correctamente.</p>
-    <p>Por favor, intenta nuevamente o selecciona otro método de pago.</p>
-    <a href="/checkout/">Volver al carrito</a>
+
+    <p class="msg">
+      Tu pago no pudo ser procesado correctamente.
+    </p>
+
+    <p class="msg">
+      Por favor intenta nuevamente o selecciona otro método de pago.
+    </p>
+
+    <a href="/checkout/" class="btn-volver">Volver al carrito</a>
+
   </div>
-</body>
-</html>
+</div>
+
+{% endblock %}

@@ -31,11 +31,21 @@ class OrderItemSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     items = OrderItemSerializer(many=True, read_only=True)
 
+    # 👇 Nuevos campos que tu frontend necesita
+    name = serializers.SerializerMethodField()
+    phone = serializers.SerializerMethodField()
+    address = serializers.SerializerMethodField()
+    email = serializers.SerializerMethodField()
+
     class Meta:
         model = Order
         fields = (
             "id",
             "customer",
+            "name",
+            "phone",
+            "address",
+            "email",
             "status",
             "total_price",
             "payment_method",
@@ -44,6 +54,19 @@ class OrderSerializer(serializers.ModelSerializer):
             "items",
         )
         read_only_fields = ("created_at", "updated_at")
+
+    # ==== DATOS DEL CLIENTE ====
+    def get_name(self, obj):
+        return obj.customer.name if obj.customer else ""
+
+    def get_phone(self, obj):
+        return obj.customer.phone if obj.customer else ""
+
+    def get_address(self, obj):
+        return obj.customer.address if obj.customer else ""
+
+    def get_email(self, obj):
+        return obj.customer.email if obj.customer else ""
 
     def create(self, validated_data):
         items_data = validated_data.pop("items", [])

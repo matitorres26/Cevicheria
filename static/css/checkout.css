@@ -1,0 +1,356 @@
+/* ============================================================
+   VARIABLES DE COLOR
+   ============================================================ */
+:root {
+  --bambu: #92ac44;
+  --bambu-light: #a8bf74;
+  --bambu-dark: #6f8834;
+
+  --white: #ffffff;
+  --gray-50: #f9fafb;
+  --gray-100: #f1f3f5;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-900: #111827;
+
+  --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.08);
+  --shadow-hard: 0 25px 60px rgba(0, 0, 0, 0.25);
+
+  --radius: 14px;
+  --radius-lg: 22px;
+  --transition: 0.25s ease;
+}
+
+
+/* ============================================================
+   CONTENEDOR PRINCIPAL
+   ============================================================ */
+.checkout-wrapper {
+  max-width: 1000px;
+  margin: 3rem auto;
+  padding-bottom: 2rem;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--gray-100);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+  animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.checkout-header {
+  background: linear-gradient(90deg, var(--bambu), var(--bambu-light));
+  color: var(--white);
+  text-align: center;
+  padding: 2.8rem 1rem;
+}
+
+.checkout-header h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.5px;
+}
+
+.checkout-header p {
+  opacity: 0.9;
+  margin: 0;
+}
+
+
+/* ============================================================
+   CUERPO
+   ============================================================ */
+.checkout-body {
+  padding: 2.3rem 2.5rem;
+}
+
+
+/* ============================================================
+   TABLA DEL CARRITO
+   ============================================================ */
+.cart-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.cart-table th {
+  background: var(--gray-50);
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.6px;
+  color: var(--gray-700);
+  padding: 1rem;
+}
+
+.cart-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--gray-100);
+  vertical-align: middle;
+}
+
+.cart-table tfoot td {
+  font-weight: 700;
+  background: var(--gray-50);
+}
+
+
+/* ============================================================
+   BOTONES DE CANTIDAD
+   ============================================================ */
+.qty-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.qty-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid var(--gray-300);
+  background: var(--white);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+.qty-btn:hover {
+  background: var(--bambu);
+  border-color: var(--bambu);
+  color: var(--white);
+}
+
+
+/* ============================================================
+   FORMULARIO
+   ============================================================ */
+.form-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+  color: var(--gray-700);
+}
+
+.form-group input,
+.form-group select {
+  padding: 0.95rem 1rem;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--gray-300);
+  background: var(--white);
+  font-size: 1rem;
+  color: var(--gray-900);
+  transition: var(--transition);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: var(--bambu);
+  box-shadow: 0 0 0 3px rgba(146, 172, 68, 0.25);
+  outline: none;
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+
+/* ============================================================
+   BOTONES GENERALES
+   ============================================================ */
+.btn-group {
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 0.9rem 2rem;
+  border-radius: var(--radius);
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+  min-width: 170px;
+  text-align: center;
+}
+
+.btn-primary {
+  background: var(--bambu);
+  color: var(--white);
+}
+
+.btn-primary:hover {
+  background: var(--bambu-light);
+  box-shadow: 0 4px 12px rgba(146, 172, 68, 0.45);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: var(--white);
+  border: 2px solid var(--bambu);
+  color: var(--bambu);
+}
+
+.btn-secondary:hover {
+  background: var(--bambu);
+  color: var(--white);
+}
+
+.btn-dark {
+  background: #374151;
+  color: white;
+}
+
+.btn-dark:hover {
+  opacity: 0.92;
+}
+
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(10px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 1rem;
+}
+
+.modal-box {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  max-width: 430px;
+  width: 100%;
+  border: 3px solid var(--bambu);
+  box-shadow: var(--shadow-hard);
+  animation: popup 0.35s ease-out;
+  overflow: hidden;
+}
+
+@keyframes popup {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.modal-header {
+  background: linear-gradient(135deg, var(--bambu-dark), var(--bambu));
+  padding: 1.8rem 1.4rem;
+  text-align: center;
+  color: var(--white);
+}
+
+.modal-body {
+  padding: 1.8rem;
+}
+
+
+/* ============================================================
+   TIMER
+   ============================================================ */
+.timer-box {
+  text-align: center;
+  margin-bottom: 1.6rem;
+}
+
+.timer-label {
+  color: #166534;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.timer-value {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: var(--bambu);
+  letter-spacing: -1px;
+}
+
+
+/* ============================================================
+   TICKET
+   ============================================================ */
+.ticket {
+  background: var(--gray-50);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--gray-200);
+}
+
+.ticket-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.ticket-info p {
+  margin: 0.3rem 0;
+}
+
+.ticket-items td {
+  padding: 0.6rem 0;
+}
+
+.ticket-total {
+  border-top: 3px double var(--bambu);
+  padding-top: 1rem;
+  text-align: right;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+  .checkout-body {
+    padding: 1.5rem;
+  }
+
+  .btn {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .modal-box {
+    max-width: 95%;
+  }
+}
+
+/* Ocultar texto a lectores visuales para legend */
+.visually-hidden {
+  position: absolute;
+  left: -9999px;
+}

@@ -2,283 +2,218 @@ import { useEffect, useState, useRef } from "react";
 import { sendNotification, requestPermission } from "@tauri-apps/plugin-notification";
 import { writeTextFile, readTextFile, BaseDirectory } from "@tauri-apps/plugin-fs";
 
+const API_URL = "http://127.0.0.1:8000/api";
+const WS_URL = "ws://127.0.0.1:8000/ws/orders/";
 
-async function updateStatus(id, status, orders, setOrders, saveOrders) {
+async function apiPatch(url, body) {
   try {
-    const response = await fetch(`http://127.0.0.1:8000/api/orders/${id}/`, {
+    const r = await fetch(url, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status }),
+      body: JSON.stringify(body),
     });
-
-    if (!response.ok) throw new Error(`Error ${response.status}`);
-    console.log(`✅ Pedido #${id} actualizado a ${status}`);
-
-    // 🔄 Actualizar el estado local y guardar
-    const updatedOrders = orders.map((order) =>
-      order.id === id ? { ...order, status } : order
-    );
-    setOrders(updatedOrders);
-    saveOrders(updatedOrders);
-
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
     return true;
-  } catch (err) {
-    console.error(`❌ No se pudo actualizar pedido #${id}:`, err);
+  } catch {
     return false;
   }
 }
 
-function App() {
+const statusColors = {
+  NEW: "#2ecc71",
+  IN_PROGRESS: "#f1c40f",
+  READY: "#3498db",
+  DELIVERED: "#95a5a6",
+};
+
+function formatTimer(msLeft) {
+  if (msLeft <= 0) return "Listo";
+  const sec = Math.floor(msLeft / 1000);
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return `${m}m ${s.toString().padStart(2, "0")}s`;
+}
+
+async function saveOrders(orders) {
+  try {
+    await writeTextFile("pedidos.json", JSON.stringify(orders, null, 2), {
+      baseDir: BaseDirectory.AppData,
+    });
+  // eslint-disable-next-line no-empty
+  } catch {}
+}
+
+async function loadOrders() {
+  try {
+    const data = await readTextFile("pedidos.json", {
+      baseDir: BaseDirectory.AppData,
+    });
+    return JSON.parse(data);
+  } catch {
+    return [];
+  }
+}
+
+export default function App() {
   const [connected, setConnected] = useState(false);
   const [orders, setOrders] = useState([]);
-  const [reconnecting, setReconnecting] = useState(false);
+  const [now, setNow] = useState(Date.now());
   const wsRef = useRef(null);
-
-  async function saveOrders(orders) {
-    try {
-      const data = JSON.stringify(orders, null, 2);
-      await writeTextFile("pedidos.json", data, { baseDir: BaseDirectory.AppData });
-      console.log("💾 Pedidos guardados localmente.");
-    } catch (err) {
-      console.error("❌ Error guardando pedidos:", err);
-    }
-  }
-
-  // --- Cargar pedidos guardados al iniciar ---
-  async function loadOrders() {
-    try {
-      const data = await readTextFile("pedidos.json", { baseDir: BaseDirectory.AppData });
-      console.log("📂 Pedidos cargados desde archivo local.");
-      return JSON.parse(data);
-    } catch {
-      console.warn("⚠️ No hay pedidos guardados aún.");
-      return [];
-    }
-  }
+  const reconnectRef = useRef(null);
 
   useEffect(() => {
-    // Cargar historial previo
-    loadOrders().then((data) => setOrders(data));
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, []);
 
-    // Pedir permiso de notificaciones
-    requestPermission();
+  useEffect(() => {
+    let delay = 2000;
 
-    let reconnectInterval = 2000;
-    let reconnectTimer;
-
-    const connectWebSocket = () => {
+    const connect = () => {
       if (wsRef.current) return;
 
-      console.log("🔌 Intentando conectar WebSocket...");
-      const ws = new WebSocket("ws://127.0.0.1:8000/ws/orders/");
+      const ws = new WebSocket(WS_URL);
       wsRef.current = ws;
 
       ws.onopen = () => {
-        console.log("✅ Conectado al WebSocket");
         setConnected(true);
-        setReconnecting(false);
+        delay = 2000;
       };
 
       ws.onclose = () => {
-        console.warn("⚠️ WebSocket desconectado");
         setConnected(false);
-        setReconnecting(true);
         wsRef.current = null;
-        reconnectTimer = setTimeout(connectWebSocket, reconnectInterval);
-        reconnectInterval = Math.min(reconnectInterval * 1.5, 10000);
+        reconnectRef.current = setTimeout(connect, delay);
+        delay = Math.min(delay * 1.5, 10000);
       };
 
-      ws.onerror = (err) => {
-        console.error("❌ Error WS:", err);
-        ws.close();
-      };
+      ws.onerror = () => ws.close();
 
-      ws.onmessage = (e) => {
+      ws.onmessage = (msg) => {
         try {
-          const data = JSON.parse(e.data);
-          if (data.type === "new_order" && data.order) {
-            const order = data.order;
-            console.log("📦 Pedido recibido:", order);
+          const data = JSON.parse(msg.data);
+          if (data?.type !== "new_order") return;
 
-            setOrders((prev) => {
-              if (prev.find((o) => o.id === order.id)) return prev;
-              const updated = [order, ...prev];
-              saveOrders(updated); // 💾 Guardar cada vez que llegue uno nuevo
-              return updated;
-            });
+          const order = { ...data.order, _receivedAt: Date.now() };
 
-            sendNotification({
-              title: "🦞 Nuevo Pedido",
-              body: order.cliente
-                ? `Pedido #${order.id} de ${order.cliente}`
-                : `Nuevo pedido #${order.id}`,
-            });
+          setOrders((prev) => {
+            if (prev.some((o) => o.id === order.id)) return prev;
+            const updated = [order, ...prev];
+            saveOrders(updated);
+            return updated;
+          });
 
-            const sound = new Audio("/notification.mp3");
-            sound.volume = 0.3;
-            sound.play().catch(() => {});
-          }
-        } catch (err) {
-          console.error("Error procesando mensaje WS:", err);
-        }
+          sendNotification({
+            title: "🦞 Nuevo Pedido",
+            body: `Pedido #${order.id} recibido`,
+          });
+
+          new Audio("/notification.mp3").play().catch(() => {});
+        // eslint-disable-next-line no-empty
+        } catch {}
       };
     };
 
-    connectWebSocket();
+    loadOrders().then(setOrders);
+    requestPermission();
+    connect();
 
     return () => {
-      if (wsRef.current) {
-        wsRef.current.close();
-        wsRef.current = null;
-      }
-      clearTimeout(reconnectTimer);
+      wsRef.current?.close();
+      clearTimeout(reconnectRef.current);
     };
   }, []);
 
-  // --- Determinar color de borde según estado ---
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "NEW":
-        return "#2ecc71"; // verde
-      case "IN_PROGRESS":
-        return "#f1c40f"; // amarillo
-      case "READY":
-        return "#3498db"; // azul
-      case "DELIVERED":
-        return "#95a5a6"; // gris
-      default:
-        return "#2ecc71";
-    }
-  };
+  async function setOrderStatus(id, status) {
+    const ok = await apiPatch(`${API_URL}/orders/${id}/`, { status });
+    if (!ok) return;
+
+    setOrders((prev) => {
+      const updated = prev.map((o) => (o.id === id ? { ...o, status } : o));
+      saveOrders(updated);
+      return updated;
+    });
+  }
 
   return (
     <div
       style={{
         padding: "40px",
-        color: "#f1f1f1",
         backgroundColor: "#1e1e1e",
-        fontFamily: "Poppins, sans-serif",
         minHeight: "100vh",
+        color: "#fff",
+        fontFamily: "Poppins",
       }}
     >
       <h1>🦞 SOS Cevichería & Sushi</h1>
+
       <p>
         Estado:{" "}
-        <span
-          style={{
-            color: connected ? "lightgreen" : reconnecting ? "orange" : "red",
-            fontWeight: "bold",
-          }}
-        >
-          {connected
-            ? "Conectado 🟢"
-            : reconnecting
-            ? "Reconectando... 🟠"
-            : "Desconectado 🔴"}
-        </span>
+        <strong style={{ color: connected ? "lightgreen" : "red" }}>
+          {connected ? "Conectado 🟢" : "Desconectado 🔴"}
+        </strong>
       </p>
 
-      <h3>📦 Pedidos recientes</h3>
+      <h3>📦 Pedidos</h3>
 
-      {orders.length === 0 ? (
-        <p>Sin pedidos aún...</p>
-      ) : (
-        orders.map((order) => (
+      {orders.length === 0 && <p>Sin pedidos...</p>}
+
+      {orders.map((o) => {
+        const eta = (o.eta_minutes || 30) * 60000;
+        const left = o._receivedAt ? o._receivedAt + eta - now : 0;
+
+        return (
           <div
-            key={order.id}
+            key={o.id}
             style={{
               background: "#2c2c2c",
               padding: "15px",
               marginBottom: "12px",
               borderRadius: "10px",
-              borderLeft: `5px solid ${getStatusColor(order.status || order.estado)}`,
+              borderLeft: `6px solid ${statusColors[o.status] || "#2ecc71"}`,
             }}
           >
-            <h4>Pedido #{order.id}</h4>
+            <h4>Pedido #{o.id}</h4>
+
             <p>
-              <strong>Cliente:</strong> {order.cliente || "Desconocido"} <br />
-              <strong>Teléfono:</strong> {order.telefono || "—"} <br />
-              <strong>Dirección:</strong> {order.direccion || "—"} <br />
-              <strong>Pago:</strong> {order.pago || "—"} <br />
-              <strong>Total:</strong> ${order.total?.toFixed(0) || 0} <br />
-              <strong>Estado:</strong>{" "}
-              <span style={{ color: getStatusColor(order.status || order.estado) }}>
-                {order.status || order.estado || "Desconocido"}
-              </span>{" "}
-              <br />
-              <small>{order.creado || "Fecha desconocida"}</small>
+              <strong>Cliente:</strong> {o.cliente || "—"} <br />
+              <strong>Total:</strong> ${o.total || 0} <br />
+              <strong>Estado:</strong> {o.status} <br />
+              <strong>Tiempo restante:</strong> {formatTimer(left)}
             </p>
 
-            {order.items?.length > 0 ? (
-              <ul style={{ listStyle: "none", padding: 0 }}>
-                {order.items.map((item, idx) => (
-                  <li key={idx}>
-                    🐟 {item.cantidad} × {item.producto} — $
-                    {item.subtotal?.toFixed(0) || 0}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p style={{ fontSize: "0.9rem", color: "#aaa" }}>
-                (Sin productos registrados)
-              </p>
-            )}
+            <ul>
+              {(o.items || []).map((i, idx) => (
+                <li key={idx}>
+                  {i.qty} × {i.product_name} — ${i.subtotal}
+                </li>
+              ))}
+            </ul>
 
-            {/* --- Botones de control de estado --- */}
-            <div style={{ marginTop: "10px" }}>
-              <button
-                onClick={() =>
-                  updateStatus(order.id, "IN_PROGRESS", orders, setOrders, saveOrders)
-                }
-                style={{
-                  marginRight: "10px",
-                  background: "#f1c40f",
-                  color: "#000",
-                  border: "none",
-                  padding: "5px 10px",
-                  borderRadius: "6px",
-                  fontWeight: "bold",
-                }}
-              >
-                🧑‍🍳 En preparación
+            <div style={{ marginTop: 10 }}>
+              <button onClick={() => setOrderStatus(o.id, "IN_PROGRESS")} style={btn("#f1c40f")}>
+                🧑‍🍳 Preparando
               </button>
-              <button
-                onClick={() =>
-                  updateStatus(order.id, "READY", orders, setOrders, saveOrders)
-                }
-                style={{
-                  marginRight: "10px",
-                  background: "#3498db",
-                  color: "#fff",
-                  border: "none",
-                  padding: "5px 10px",
-                  borderRadius: "6px",
-                  fontWeight: "bold",
-                }}
-              >
+              <button onClick={() => setOrderStatus(o.id, "READY")} style={btn("#3498db")}>
                 ✅ Listo
               </button>
-              <button
-                onClick={() =>
-                  updateStatus(order.id, "DELIVERED", orders, setOrders, saveOrders)
-                }
-                style={{
-                  background: "#95a5a6",
-                  color: "#fff",
-                  border: "none",
-                  padding: "5px 10px",
-                  borderRadius: "6px",
-                  fontWeight: "bold",
-                }}
-              >
+              <button onClick={() => setOrderStatus(o.id, "DELIVERED")} style={btn("#7f8c8d")}>
                 🚚 Entregado
               </button>
             </div>
           </div>
-        ))
-      )}
+        );
+      })}
     </div>
   );
 }
 
-export default App;
+const btn = (bg) => ({
+  marginRight: "8px",
+  background: bg,
+  border: "none",
+  padding: "6px 12px",
+  borderRadius: "6px",
+  fontWeight: "bold",
+  cursor: "pointer",
+});

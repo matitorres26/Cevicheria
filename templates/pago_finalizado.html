@@ -1,157 +1,64 @@
-<!DOCTYPE html> 
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pago exitoso | SOS Cevichería & Sushi</title>
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #e8f9f4, #ffffff);
-      text-align: center;
-      color: #333;
-      padding: 60px 20px;
-    }
-    .card {
-      background: #fff;
-      border-radius: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      display: inline-block;
-      padding: 40px 60px;
-      max-width: 500px;
-      animation: fadeIn 0.7s ease;
-    }
-    h1 {
-      color: #00b894;
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-    }
-    p {
-      font-size: 1.1rem;
-      margin: 10px 0;
-    }
-    .emoji {
-      font-size: 3rem;
-      margin-bottom: 10px;
-    }
-    a.button {
-      display: inline-block;
-      margin-top: 25px;
-      background: #00b894;
-      color: white;
-      padding: 12px 30px;
-      border-radius: 12px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: all 0.2s ease;
-    }
-    a.button:hover {
-      background: #009f7a;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(15px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+{% extends "base.html" %}
+{% load static %}
 
-    /* BOLETA */
-    .boleta {
-      margin-top: 25px;
-      background: #f8fffe;
-      border: 2px dashed #00b894;
-      padding: 20px;
-      text-align: left;
-      border-radius: 14px;
-      font-size: 0.95rem;
-    }
-    .boleta h3 {
-      margin-bottom: 10px;
-      color: #009f7a;
-    }
-    .timer {
-      margin-top: 20px;
-      padding: 12px;
-      background: #e9fff7;
-      border-radius: 10px;
-      color: #006f5f;
-      font-weight: 600;
-      font-size: 1.1rem;
-    }
-  </style>
-</head>
+{% block title %}Pago exitoso - SOS{% endblock %}
 
-<body>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pago_finalizado.css' %}">
+{% endblock %}
 
-  <div class="card">
-    <div class="emoji">🎉</div>
-    <h1>¡Pago procesado con éxito!</h1>
-    <p>Gracias por tu compra 🦞</p>
-    <p>Tu pedido ha sido confirmado y está en preparación.</p>
+{% block content %}
 
-    <!-- BOLETA -->
-    <div class="boleta" id="boleta">
+<div class="pf-wrapper">
+  <div class="pf-card shadow-sm">
+
+    <input type="hidden" id="eta_minutes" value="{{ eta_minutes }}">
+    <input type="hidden" id="order_created" value="{{ order.created_at|date:'Y-m-d\\TH:i:s' }}">
+
+    <div class="pf-emoji">🎉</div>
+    <h1 class="pf-title">¡Pago procesado con éxito!</h1>
+    <p class="pf-sub">Gracias por tu compra 🦞</p>
+    <p class="pf-sub">Tu pedido ha sido confirmado y está en preparación.</p>
+
+    <!-- === BOLETA === -->
+    <div class="pf-boleta">
       <h3>🧾 Boleta electrónica</h3>
 
-      <p><b>Cliente:</b> <span id="b_name">Cargando...</span></p>
-      <p><b>Correo:</b> <span id="b_email">Cargando...</span></p>
-      <p><b>Pedido N°:</b> <span id="b_order">Cargando...</span></p>
-      <p><b>Fecha:</b> <span id="b_date"></span></p>
+      <p><b>Cliente:</b> {{ order.customer.name }}</p>
+      <p><b>Correo:</b> {{ order.customer.email|default:"—" }}</p>
+      <p><b>Pedido N°:</b> {{ order.id }}</p>
+      <p><b>Fecha:</b> {{ order.created_at|date:"d-m-Y H:i" }}</p>
 
       <hr>
 
-      <p><b>Total pagado:</b> <span id="b_total" style="color:#009f7a; font-size:1.2rem;"></span></p>
+      <p><b>Items:</b></p>
+      <ul>
+        {% for item in items %}
+        <li>{{ item.qty }}× {{ item.product_name }} — ${{ item.subtotal }}</li>
+        {% empty %}
+        <li>Sin productos.</li>
+        {% endfor %}
+      </ul>
+
+      <hr>
+
+      <p class="pf-total">
+        <b>Total pagado:</b>
+        <span>${{ order.total_price }}</span>
+      </p>
     </div>
 
-    <!-- TIMER -->
-    <div class="timer" id="timer">
-      Pedido listo en <b>35:00</b>
+    <!-- === TIMER REAL === -->
+    <div class="pf-timer" id="timer">
+      Pedido listo en <b>{{ eta_minutes }}:00</b>
     </div>
 
-    <a href="/" class="button">Volver al inicio</a>
+    <a href="/" class="pf-btn">Volver al inicio</a>
+
   </div>
+</div>
+{% endblock %}
 
-  <script>
-    // ======================================================
-    //  RECONSTRUCCIÓN DE DATOS DE LA ORDEN DESDE SESSIONSTORAGE
-    // ======================================================
-
-    const order = JSON.parse(sessionStorage.getItem("lastOrder") || "{}");
-
-    document.getElementById("b_name").textContent = order.name || "—";
-    document.getElementById("b_email").textContent = order.email || "—";
-    document.getElementById("b_order").textContent = order.id || "—";
-    document.getElementById("b_total").textContent = "$" + (order.total_price || 0).toLocaleString("es-CL");
-
-    // FECHA
-    const f = new Date();
-    document.getElementById("b_date").textContent =
-      f.toLocaleDateString("es-CL") + " " + f.toLocaleTimeString("es-CL");
-
-    // ======================================================
-    // TIMER 35 MIN (COUNTDOWN)
-    // ======================================================
-    let minutos = 35;
-    let segundos = 0;
-
-    const timer = document.getElementById("timer");
-
-    const interval = setInterval(() => {
-
-      if (segundos === 0) {
-        minutos--;
-        segundos = 59;
-      } else {
-        segundos--;
-      }
-
-      timer.innerHTML = `Pedido listo en <b>${String(minutos).padStart(2,'0')}:${String(segundos).padStart(2,'0')}</b>`;
-
-      if (minutos <= 0 && segundos <= 0) {
-        clearInterval(interval);
-        timer.innerHTML = "<b style='color:#00b894'>Tu pedido debería estar listo ahora 🎉</b>";
-      }
-
-    }, 1000);
-  </script>
-
-</body>
-</html>
+{% block extra_js %}
+<script src="{% static 'js/pago_finalizado.js' %}" defer></script>
+{% endblock %}
