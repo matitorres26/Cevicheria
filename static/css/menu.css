@@ -25,7 +25,7 @@ img {
 #inicio.hero {
   position: relative;
   height: 100vh;
-  background: linear-gradient(135deg, #00a699 0%, #0077b6 100%);
+  background: url("../img/bambu.jpg") no-repeat center center/cover;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -57,7 +57,7 @@ img {
 .logo-text {
   font-size: 2rem;
   font-weight: 700;
-  color: #ff4040;
+  color: #ffffff;
   letter-spacing: 1px;
   text-transform: uppercase;
 }
