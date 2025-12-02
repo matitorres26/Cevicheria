@@ -1,1 +1,1 @@
-web: daphne -b 0.0.0.0 -p $PORT Cevicheria.asgi:application
+web: daphne -b 0.0.0.0 -p $PORT cevicheria.asgi:application
