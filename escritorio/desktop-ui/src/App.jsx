@@ -2,9 +2,8 @@ import { useEffect, useState, useRef } from "react";
 import { sendNotification, requestPermission } from "@tauri-apps/plugin-notification";
 import { writeTextFile, readTextFile, BaseDirectory } from "@tauri-apps/plugin-fs";
 
-const API_URL = "http://127.0.0.1:8000/api";
-const WS_URL = "ws://127.0.0.1:8000/ws/orders/";
-
+const API_URL = "https://cevicheria-production-1707.up.railway.app";
+const WS_URL = "wss://cevicheria-production-1707.up.railway.app/ws/orders/";
 async function apiPatch(url, body) {
   try {
     const r = await fetch(url, {
