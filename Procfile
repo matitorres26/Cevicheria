@@ -1,1 +1,1 @@
-web: python manage.py collectstatic --noinput && daphne -b 0.0.0.0 -p $PORT cevicheria.asgi:application
+web: daphne -b 0.0.0.0 -p $PORT Cevicheria.asgi:application
