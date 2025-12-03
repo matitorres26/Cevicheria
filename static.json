@@ -1,0 +1,7 @@
+{
+  "root": "staticfiles/",
+  "clean_urls": false,
+  "routes": {
+    "/media/*": "/media/"
+  }
+}
