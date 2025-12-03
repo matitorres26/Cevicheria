@@ -81,8 +81,8 @@ MIDDLEWARE = [
 #       ASGI / WSGI
 # ===========================
 ROOT_URLCONF = "cevicheria.urls"
-WSGI_APPLICATION = "Cevicheria.wsgi.application"
-ASGI_APPLICATION = "Cevicheria.asgi.application"
+WSGI_APPLICATION = "cevicheria.wsgi.application"
+ASGI_APPLICATION = "cevicheria.asgi.application"
 
 TEMPLATES = [
     {
