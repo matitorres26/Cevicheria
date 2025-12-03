@@ -80,7 +80,7 @@ MIDDLEWARE = [
 # ===========================
 #       ASGI / WSGI
 # ===========================
-ROOT_URLCONF = "Cevicheria.urls"
+ROOT_URLCONF = "cevicheria.urls"
 WSGI_APPLICATION = "Cevicheria.wsgi.application"
 ASGI_APPLICATION = "Cevicheria.asgi.application"
 
@@ -117,10 +117,12 @@ DATABASES = {
 # ===========================
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer",
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [os.getenv("REDIS_URL", "redis://127.0.0.1:6379/0")],
+        },
     }
 }
-
 # ===========================
 #       WEBPAY
 # ===========================
