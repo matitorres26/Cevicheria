@@ -1,0 +1,88 @@
+/* ============================
+   ESTILO GENERAL
+============================ */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f5f6fa;
+}
+
+/* Título */
+.titulo-pedidos {
+  font-weight: 700;
+  text-align: center;
+  color: #2c3e50;
+  margin: 2rem 0 1.5rem;
+}
+
+/* Grid responsivo */
+.orders-grid {
+  display: grid;
+  gap: 1.5rem;
+  padding: 0 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+/* Card */
+.order-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+  transition: 0.2s ease;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.order-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Títulos */
+.order-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #34495e;
+}
+
+.order-subtitle {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 0.3rem;
+}
+
+/* Lista de productos */
+.order-items {
+  list-style: none;
+  padding: 0;
+  margin: 0.8rem 0 1.2rem;
+}
+
+.order-items li {
+  background: #f9f9f9;
+  padding: 8px 12px;
+  margin-bottom: 6px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #2f3640;
+}
+
+/* Total */
+.order-total {
+  text-align: right;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #27ae60;
+}
+
+/* Badges */
+.badge {
+  padding: 0.45rem 0.7rem;
+  font-size: 0.85rem;
+  border-radius: 12px;
+}
+
+/* Animación */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

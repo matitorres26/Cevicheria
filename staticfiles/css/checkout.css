@@ -1,88 +1,120 @@
+/* ============================================================
+   VARIABLES DE COLOR
+   ============================================================ */
 :root {
-  --sos-red: #FF2E2E;
-  --sos-orange: #FFA94D;
-  --sos-green: #3AB14D;
-  --sos-blue: #00D4FF;
-  --bambu: #92AC44;
-  --bambu-claro: #A8BF74;
-  --white: #FFFFFF;
-  --gray-50: #F9FAFB;
-  --gray-100: #F1F3F5;
-  --gray-300: #D1D5DB;
+  --bambu: #92ac44;
+  --bambu-light: #a8bf74;
+  --bambu-dark: #6f8834;
+
+  --white: #ffffff;
+  --gray-50: #f9fafb;
+  --gray-100: #f1f3f5;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-600: #4b5563;
   --gray-700: #374151;
   --gray-900: #111827;
+
+  --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.08);
+  --shadow-hard: 0 25px 60px rgba(0, 0, 0, 0.25);
+
+  --radius: 14px;
+  --radius-lg: 22px;
+  --transition: 0.25s ease;
 }
 
-body {
-  font-family: "Inter", "Poppins", sans-serif;
-  background: linear-gradient(135deg, var(--white) 0%, var(--gray-50) 100%);
-  color: var(--gray-900);
-}
 
+/* ============================================================
+   CONTENEDOR PRINCIPAL
+   ============================================================ */
 .checkout-wrapper {
   max-width: 1000px;
   margin: 3rem auto;
+  padding-bottom: 2rem;
   background: var(--white);
-  border-radius: 1rem;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-  overflow: hidden;
+  border-radius: var(--radius-lg);
   border: 1px solid var(--gray-100);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
   animation: fadeIn 0.6s ease;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
+
+/* ============================================================
+   HEADER
+   ============================================================ */
 .checkout-header {
-  background: linear-gradient(90deg, var(--bambu), var(--bambu-claro));
+  background: linear-gradient(90deg, var(--bambu), var(--bambu-light));
   color: var(--white);
   text-align: center;
-  padding: 2.5rem 1rem;
+  padding: 2.8rem 1rem;
 }
 
 .checkout-header h1 {
   font-size: 2rem;
   font-weight: 800;
-  margin: 0;
+  margin-bottom: 0.4rem;
   letter-spacing: -0.5px;
 }
 
 .checkout-header p {
-  color: rgba(255,255,255,0.9);
-  margin-top: .5rem;
+  opacity: 0.9;
+  margin: 0;
 }
 
+
+/* ============================================================
+   CUERPO
+   ============================================================ */
 .checkout-body {
-  padding: 2rem 2.5rem;
+  padding: 2.3rem 2.5rem;
 }
 
+
+/* ============================================================
+   TABLA DEL CARRITO
+   ============================================================ */
 .cart-table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 2rem;
+  border-radius: var(--radius);
+  overflow: hidden;
 }
 
-.cart-table th,
-.cart-table td {
-  padding: 1rem;
-  text-align: left;
-  border-bottom: 1px solid var(--gray-100);
-}
-
-.cart-table thead {
+.cart-table th {
   background: var(--gray-50);
   text-transform: uppercase;
-  font-size: .8rem;
-  letter-spacing: .6px;
+  font-size: 0.8rem;
+  letter-spacing: 0.6px;
   color: var(--gray-700);
+  padding: 1rem;
 }
 
+.cart-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--gray-100);
+  vertical-align: middle;
+}
+
+.cart-table tfoot td {
+  font-weight: 700;
+  background: var(--gray-50);
+}
+
+
+/* ============================================================
+   BOTONES DE CANTIDAD
+   ============================================================ */
 .qty-controls {
   display: flex;
   align-items: center;
-  gap: .5rem;
+  gap: 0.5rem;
 }
 
 .qty-btn {
@@ -91,29 +123,27 @@ body {
   border-radius: 50%;
   border: 1.5px solid var(--gray-300);
   background: var(--white);
-  font-weight: 700;
   cursor: pointer;
-  transition: .2s;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: var(--transition);
 }
 
 .qty-btn:hover {
   background: var(--bambu);
+  border-color: var(--bambu);
   color: var(--white);
 }
 
-.price {
-  font-weight: 600;
-}
 
-.total-row {
-  font-size: 1.1rem;
-  background: var(--gray-50);
-}
-
+/* ============================================================
+   FORMULARIO
+   ============================================================ */
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
   gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  margin-bottom: 2rem;
 }
 
 .form-group {
@@ -123,196 +153,204 @@ body {
 
 .form-group label {
   font-weight: 600;
-  margin-bottom: .4rem;
+  margin-bottom: 0.35rem;
+  color: var(--gray-700);
 }
 
 .form-group input,
 .form-group select {
-  padding: .9rem 1rem;
+  padding: 0.95rem 1rem;
+  border-radius: var(--radius);
   border: 1.5px solid var(--gray-300);
-  border-radius: .5rem;
+  background: var(--white);
   font-size: 1rem;
+  color: var(--gray-900);
+  transition: var(--transition);
 }
 
 .form-group input:focus,
 .form-group select:focus {
   border-color: var(--bambu);
+  box-shadow: 0 0 0 3px rgba(146, 172, 68, 0.25);
   outline: none;
-  box-shadow: 0 0 0 3px rgba(146,172,68,0.3);
 }
 
+.full {
+  grid-column: 1 / -1;
+}
+
+
+/* ============================================================
+   BOTONES GENERALES
+   ============================================================ */
 .btn-group {
+  margin-top: 0.5rem;
   display: flex;
   justify-content: center;
   gap: 1rem;
-  margin-top: 1rem;
+  flex-wrap: wrap;
 }
 
 .btn {
-  padding: .9rem 2rem;
-  border-radius: .6rem;
+  padding: 0.9rem 2rem;
+  border-radius: var(--radius);
   font-weight: 700;
-  min-width: 180px;
-  border: none;
   cursor: pointer;
-  transition: .2s;
+  transition: var(--transition);
+  border: none;
+  min-width: 170px;
+  text-align: center;
 }
 
 .btn-primary {
   background: var(--bambu);
-  color: white;
+  color: var(--white);
 }
 
 .btn-primary:hover {
-  background: var(--bambu-claro);
+  background: var(--bambu-light);
+  box-shadow: 0 4px 12px rgba(146, 172, 68, 0.45);
+  transform: translateY(-2px);
 }
 
 .btn-secondary {
-  background: white;
-  color: var(--bambu);
+  background: var(--white);
   border: 2px solid var(--bambu);
+  color: var(--bambu);
 }
 
 .btn-secondary:hover {
   background: var(--bambu);
+  color: var(--white);
+}
+
+.btn-dark {
+  background: #374151;
   color: white;
 }
 
-.alert {
-  padding: 1rem;
-  border-radius: .6rem;
-  font-weight: 500;
+.btn-dark:hover {
+  opacity: 0.92;
 }
 
-.alert-warning {
-  background: #FFF4E5;
-  color: #B45309;
-}
-/* ============================
-   MODAL GRACIAS (Boleta)
-============================ */
-.modal-gracias {
-  display: none;
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+.modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(0,0,0,0.55);
   backdrop-filter: blur(10px);
-  z-index: 9999;
+  display: none;
   justify-content: center;
   align-items: center;
+  z-index: 9999;
   padding: 1rem;
 }
 
-/* Caja del modal */
-.modal-gracias-box {
-  background: #fff;
-  border-radius: 20px;
+.modal-box {
+  background: var(--white);
+  border-radius: var(--radius-lg);
   max-width: 430px;
   width: 100%;
+  border: 3px solid var(--bambu);
+  box-shadow: var(--shadow-hard);
+  animation: popup 0.35s ease-out;
   overflow: hidden;
-  border: 3px solid #92AC44;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
-  animation: modalIn .35s ease-out;
 }
 
-@keyframes modalIn {
-  from { opacity: 0; transform: scale(0.92); }
-  to { opacity: 1; transform: scale(1); }
+@keyframes popup {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
 }
 
-/* Header */
-.modal-gracias-header {
-  background: linear-gradient(135deg, #6F8834, #92AC44);
-  color: white;
+.modal-header {
+  background: linear-gradient(135deg, var(--bambu-dark), var(--bambu));
   padding: 1.8rem 1.4rem;
   text-align: center;
+  color: var(--white);
 }
 
-.modal-gracias-header h3 {
-  margin: 0;
-  font-size: 1.7rem;
-  font-weight: 700;
+.modal-body {
+  padding: 1.8rem;
 }
 
-/* Contenido */
-.modal-gracias-content {
-  padding: 1.9rem 1.6rem;
-  color: #374151;
-}
 
-.timer-block {
+/* ============================================================
+   TIMER
+   ============================================================ */
+.timer-box {
   text-align: center;
   margin-bottom: 1.6rem;
 }
 
-.timer-title {
-  margin: 0;
+.timer-label {
   color: #166534;
   font-weight: 700;
-  font-size: .95rem;
+  font-size: 0.95rem;
 }
 
-.timer-text {
-  margin-top: .3rem;
+.timer-value {
   font-size: 2.1rem;
   font-weight: 800;
-  color: #92AC44;
+  color: var(--bambu);
+  letter-spacing: -1px;
 }
 
-/* Boleta */
-.boleta-box {
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
+
+/* ============================================================
+   TICKET
+   ============================================================ */
+.ticket {
+  background: var(--gray-50);
   padding: 1.5rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--gray-200);
 }
 
-.boleta-title {
-  margin: 0;
+.ticket-title {
+  font-size: 1.1rem;
   font-weight: 700;
-  font-size: 1.05rem;
-  color: #111827;
 }
 
-.boleta-datos {
-  margin-top: 1.1rem;
-  line-height: 1.6;
-  font-size: .95rem;
+.ticket-info p {
+  margin: 0.3rem 0;
 }
 
-.boleta-items {
-  width: 100%;
-  margin: 1.2rem 0;
-  font-size: .95rem;
+.ticket-items td {
+  padding: 0.6rem 0;
 }
 
-.boleta-total {
-  border-top: 3px double #92AC44;
-  padding-top: 12px;
+.ticket-total {
+  border-top: 3px double var(--bambu);
+  padding-top: 1rem;
   text-align: right;
   font-size: 1.25rem;
   font-weight: 800;
-  color: #92AC44;
 }
 
-/* Botones modal */
-.btn-modal, .btn-modal-secondary {
-  margin-top: 1.2rem;
-  width: 100%;
-  padding: 1rem;
-  border-radius: 10px;
-  font-weight: 700;
-  font-size: 1rem;
-  cursor: pointer;
-  border: none;
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+  .checkout-body {
+    padding: 1.5rem;
+  }
+
+  .btn {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .modal-box {
+    max-width: 95%;
+  }
 }
 
-.btn-modal {
-  background: #92AC44;
-  color: white;
-}
-
-.btn-modal-secondary {
-  background: #374151;
-  color: white;
+/* Ocultar texto a lectores visuales para legend */
+.visually-hidden {
+  position: absolute;
+  left: -9999px;
 }

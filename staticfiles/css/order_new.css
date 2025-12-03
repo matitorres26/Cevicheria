@@ -1,0 +1,47 @@
+body {
+  background: #f5f6fa;
+  font-family: 'Poppins', sans-serif;
+}
+
+.titulo {
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 2rem 0 1rem;
+  text-align: center;
+}
+
+.formulario {
+  max-width: 500px;
+  margin: auto;
+  border-radius: 14px;
+  padding: 2rem;
+  background: #ffffff;
+  border: 1px solid #ecf0f1;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.form-label {
+  color: #34495e;
+}
+
+input.form-control {
+  border-radius: 10px;
+  padding: 0.75rem;
+}
+
+button.btn-primary {
+  font-weight: 600;
+  padding: 0.8rem;
+  border-radius: 12px;
+}
+
+#msg {
+  font-size: 0.95rem;
+}
+
+/* Animación */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
