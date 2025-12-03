@@ -2,21 +2,21 @@ import json
 from django.utils import timezone
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
-from .models import Order, OrderItem
 
 
-# --- Función síncrona, segura para Railway ---
+# --- Función síncrona para el ETA ---
 def calcular_tiempo_estimado():
+    # Import diferido aquí también ← evita errores si se llama muy temprano
+    from pedidos.models import Order
+    
     ahora = timezone.now()
     hora = ahora.hour
 
     base = 25
 
-    # Horas punta
     if (12 <= hora <= 15) or (19 <= hora <= 21):
         base = 30
 
-    # Pedidos activos
     activos = Order.objects.filter(status__in=["NEW", "IN_PROGRESS"]).count()
 
     extra = min(max(activos, 1), 25)
@@ -51,12 +51,16 @@ class OrdersConsumer(AsyncWebsocketConsumer):
 
     @sync_to_async
     def obtener(self, order_id):
-        """Consulta a la BD (síncrona) convertida a async."""
+        """Consulta a la BD convertida a async."""
+
+        # IMPORT NECESARIO AQUÍ (seguro 100%)
+        from pedidos.models import Order
+
         try:
             order = Order.objects.select_related("customer").get(id=order_id)
             items = order.items.all()
 
-            eta = calcular_tiempo_estimado() 
+            eta = calcular_tiempo_estimado()
 
             return {
                 "id": order.id,
