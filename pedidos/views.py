@@ -56,23 +56,32 @@ class ProductViewSet(viewsets.ModelViewSet):
 
 
 class OrderViewSet(viewsets.ModelViewSet):
-    queryset = (
-        Order.objects.select_related("customer")
-        .prefetch_related("items")
-        .order_by("-id")
-    )
     serializer_class = OrderSerializer
     permission_classes = [AllowAny]
 
-    def perform_create(self, serializer):
-        # 🚫 No notificamos aquí para no duplicar notificaciones
-        order = serializer.save()
-        print(
-            f"🧾 Pedido #{order.id} creado desde API interna "
-            f"(sin notificación automática)."
+    def get_queryset(self):
+        qs = (
+            Order.objects
+            .select_related("customer")
+            .prefetch_related("items")
+            .order_by("-id")
         )
-        # Si algún día quieres que desde el panel se notifique:
-        # notify_new_order(order.id)
+
+        # Si pasas ?all=1 te trae todo (útil para pruebas o admin)
+        show_all = self.request.query_params.get("all")
+        if show_all:
+            return qs
+
+        # 👇 Por defecto: NO mostrar pedidos Webpay pendientes
+        return qs.exclude(
+            payment_method="WEBPAY",
+            payment_status="PENDING",
+        )
+
+    def perform_create(self, serializer):
+        # Ya no notificamos desde aquí
+        order = serializer.save()
+        print(f"🧾 Pedido #{order.id} creado desde API interna (sin notificación automática).")
 
 
 # ========================
