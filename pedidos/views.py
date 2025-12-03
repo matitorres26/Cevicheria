@@ -27,6 +27,19 @@ from transbank.common.integration_type import IntegrationType
 
 
 # ========================
+#  HELPER WEBSOCKET
+# ========================
+
+def notify_new_order(order_id: int):
+    """Envía la orden al grupo de WebSocket 'orders' (Tauri)."""
+    layer = get_channel_layer()
+    async_to_sync(layer.group_send)(
+        "orders",
+        {"type": "new_order", "order_id": order_id},
+    )
+
+
+# ========================
 #     API VIEWSETS
 # ========================
 
@@ -41,16 +54,25 @@ class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     permission_classes = [AllowAny]
 
+
 class OrderViewSet(viewsets.ModelViewSet):
-    queryset = Order.objects.select_related("customer").prefetch_related("items").order_by("-id")
+    queryset = (
+        Order.objects.select_related("customer")
+        .prefetch_related("items")
+        .order_by("-id")
+    )
     serializer_class = OrderSerializer
     permission_classes = [AllowAny]
 
     def perform_create(self, serializer):
-        # 🚫 Ya no notificamos desde aquí
+        # 🚫 No notificamos aquí para no duplicar notificaciones
         order = serializer.save()
-        print(f"🧾 Pedido #{order.id} creado desde API interna (sin notificación automática).")
-
+        print(
+            f"🧾 Pedido #{order.id} creado desde API interna "
+            f"(sin notificación automática)."
+        )
+        # Si algún día quieres que desde el panel se notifique:
+        # notify_new_order(order.id)
 
 
 # ========================
@@ -64,7 +86,7 @@ class PublicOrderCreateView(CreateAPIView):
 
     def perform_create(self, serializer):
         order = serializer.save()
-        payment_method = serializer.validated_data.get("payment_method", "CASH")
+        payment_method = serializer.validated_data.get("payment_method") or "CASH"
 
         # 🔹 Estado inicial
         order.payment_method = payment_method
@@ -74,17 +96,17 @@ class PublicOrderCreateView(CreateAPIView):
 
         print(f"🕓 Pedido #{order.id} creado ({payment_method})")
 
-        # 🚫 No notificar pedidos Webpay aún
-        if payment_method == "CASH":
-            # Solo los de efectivo llegan al local al instante
-            layer = get_channel_layer()
-            async_to_sync(layer.group_send)(
-                "orders",
-                {"type": "new_order", "order_id": order.id}
+        # 💡 Lógica clave:
+        #  - CASH (u otros que no sean WEBPAY) -> se notifica altiro
+        #  - WEBPAY -> solo se notifica cuando el pago se autorice
+        if payment_method == "WEBPAY":
+            print(
+                f"💳 Pedido #{order.id} con Webpay pendiente, "
+                "NO se notifica todavía."
             )
-            print(f"💵 Pedido #{order.id} en efectivo notificado")
         else:
-            print(f"💳 Pedido #{order.id} en Webpay pendiente, no se notifica todavía.")
+            notify_new_order(order.id)
+            print(f"💵 Pedido #{order.id} en {payment_method} notificado al local")
 
 
 # ========================
@@ -101,7 +123,7 @@ def webpay_init_transaction(request, order_id):
         options = WebpayOptions(
             commerce_code=IntegrationCommerceCodes.WEBPAY_PLUS,
             api_key=IntegrationApiKeys.WEBPAY,
-            integration_type=IntegrationType.TEST
+            integration_type=IntegrationType.TEST,
         )
 
         tx = Transaction(options)
@@ -121,10 +143,12 @@ def webpay_init_transaction(request, order_id):
         order.payment_method = "WEBPAY"
         order.save()
 
-        return JsonResponse({
-            "url": response["url"],
-            "token": response["token"]
-        })
+        return JsonResponse(
+            {
+                "url": response["url"],
+                "token": response["token"],
+            }
+        )
 
     except Exception as e:
         print("❌ Error iniciando Webpay:", e)
@@ -145,7 +169,7 @@ def webpay_commit_transaction(request):
         options = WebpayOptions(
             commerce_code=IntegrationCommerceCodes.WEBPAY_PLUS,
             api_key=IntegrationApiKeys.WEBPAY,
-            integration_type=IntegrationType.TEST
+            integration_type=IntegrationType.TEST,
         )
 
         tx = Transaction(options)
@@ -171,12 +195,8 @@ def webpay_commit_transaction(request):
             order.payment_status = "SUCCESS"
             order.save()
 
-            # 🔔 Notificar al WebSocket (solo si se pagó correctamente)
-            layer = get_channel_layer()
-            async_to_sync(layer.group_send)(
-                "orders",
-                {"type": "new_order", "order_id": order.id}
-            )
+            # 🔔 Notificar al WebSocket SOLO ahora
+            notify_new_order(order.id)
 
             print(f"✅ Pedido #{order.id} pagado correctamente y notificado.")
             return HttpResponseRedirect(f"/pago-finalizado/?order_id={order.id}")
@@ -196,7 +216,8 @@ def webpay_commit_transaction(request):
     except Exception as e:
         print("❌ Error en commit Webpay:", e)
         return JsonResponse({"error": str(e)}, status=400)
-    
+
+
 def pago_finalizado(request):
     order_id = request.GET.get("order_id")
 
@@ -204,8 +225,7 @@ def pago_finalizado(request):
         return redirect("/")
 
     order = (
-        Order.objects
-        .select_related("customer")
+        Order.objects.select_related("customer")
         .prefetch_related("items")
         .filter(id=order_id)
         .first()
@@ -216,17 +236,22 @@ def pago_finalizado(request):
 
     # === Cálculo ETA ===
     from pedidos.consumers import calcular_tiempo_estimado
+
     eta_minutes = calcular_tiempo_estimado()
     ready_at = order.created_at + timedelta(minutes=eta_minutes)
 
-    return render(request, "pago_finalizado.html", {
-        "order": order,
-        "items": order.items.all(),
-        "eta_minutes": eta_minutes,
-        "ready_at": ready_at,
-    })
+    return render(
+        request,
+        "pago_finalizado.html",
+        {
+            "order": order,
+            "items": order.items.all(),
+            "eta_minutes": eta_minutes,
+            "ready_at": ready_at,
+        },
+    )
+
 
 def active_orders_count(request):
     count = Order.objects.filter(status__in=["NEW", "IN_PROGRESS"]).count()
     return JsonResponse({"count": count})
-
