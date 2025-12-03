@@ -73,58 +73,67 @@
     </form>
 
   </section>
-</main>
 
-<!-- ======================= -->
-<!--     MODAL DE ÉXITO     -->
-<!-- ======================= -->
 
-<div id="modalGracias" class="modal-overlay" aria-modal="true" role="dialog">
-  <div class="modal-box">
+  <!-- ======================= -->
+  <!--     MODAL DE ÉXITO     -->
+  <!-- ======================= -->
 
-    <header class="modal-header">
-      <h3>Pedido Confirmado</h3>
-      <p>N° <strong id="b_id_header"></strong></p>
-    </header>
+  <!-- Modal movido DENTRO del <main> y forzado oculto -->
+  <div id="modalGracias"
+       class="modal-overlay"
+       aria-modal="true"
+       role="dialog"
+       style="display:none !important">
 
-    <section class="modal-body">
+    <div class="modal-box">
 
-      <!-- TIMER -->
-      <div class="timer-box">
-        <p class="timer-label">Tiempo estimado</p>
-        <p id="timerTexto" class="timer-value">35m 00s</p>
-      </div>
+      <header class="modal-header">
+        <h3>Pedido Confirmado</h3>
+        <p>N° <strong id="b_id_header"></strong></p>
+      </header>
 
-      <!-- TICKET -->
-      <article class="ticket">
-        <p class="ticket-title">Cevichería SOS</p>
+      <section class="modal-body">
 
-        <div class="ticket-info">
-          <p><strong>Cliente:</strong> <span id="b_nombre"></span></p>
-          <p><strong>Fecha:</strong> <span id="b_fecha"></span></p>
-          <div id="extra-info"></div>
+        <!-- TIMER -->
+        <div class="timer-box">
+          <p class="timer-label">Tiempo estimado</p>
+          <p id="timerTexto" class="timer-value">35m 00s</p>
         </div>
 
-        <table class="ticket-items">
-          <tbody id="b_items"></tbody>
-        </table>
+        <!-- TICKET -->
+        <article class="ticket">
+          <p class="ticket-title">Cevichería SOS</p>
 
-        <div class="ticket-total">
-          TOTAL <span id="b_total"></span>
-        </div>
-      </article>
+          <div class="ticket-info">
+            <p><strong>Cliente:</strong> <span id="b_nombre"></span></p>
+            <p><strong>Fecha:</strong> <span id="b_fecha"></span></p>
+            <div id="extra-info"></div>
+          </div>
 
-      <!-- BOTONES -->
-      <button class="btn btn-primary full" onclick="cerrarModalGracias()">
-        Volver al Menú
-      </button>
+          <table class="ticket-items">
+            <tbody id="b_items"></tbody>
+          </table>
 
-      <button class="btn btn-dark full" onclick="imprimirBoleta()">
-        Imprimir Boleta (PDF)
-      </button>
+          <div class="ticket-total">
+            TOTAL <span id="b_total"></span>
+          </div>
+        </article>
 
-    </section>
+        <!-- BOTONES -->
+        <button class="btn btn-primary full" onclick="cerrarModalGracias()">
+          Volver al Menú
+        </button>
+
+        <button class="btn btn-dark full" onclick="imprimirBoleta()">
+          Imprimir Boleta (PDF)
+        </button>
+
+      </section>
+
+    </div>
   </div>
-</div>
+
+</main>
 
 {% endblock %}

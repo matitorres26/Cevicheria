@@ -80,7 +80,7 @@ class PublicOrderCreateView(CreateAPIView):
             layer = get_channel_layer()
             async_to_sync(layer.group_send)(
                 "orders",
-                {"type": "new.order", "order_id": order.id}
+                {"type": "new_order", "order_id": order.id}
             )
             print(f"💵 Pedido #{order.id} en efectivo notificado")
         else:
@@ -175,7 +175,7 @@ def webpay_commit_transaction(request):
             layer = get_channel_layer()
             async_to_sync(layer.group_send)(
                 "orders",
-                {"type": "new.order", "order_id": order.id}
+                {"type": "new_order", "order_id": order.id}
             )
 
             print(f"✅ Pedido #{order.id} pagado correctamente y notificado.")

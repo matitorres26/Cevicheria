@@ -23,7 +23,7 @@ urlpatterns = [
     # Documentación y esquema API
     #path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     #path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema")),
-
+    
     # Endpoints de la API
     path("api/", include(router.urls)),
     path("api/public/orders/", PublicOrderCreateView.as_view(), name="public-order-create"),

@@ -111,7 +111,8 @@ DATABASES = {
         ssl_require=True
     )
 }
-
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # ===========================
 #   CHANNELS (WebSockets)
 # ===========================
