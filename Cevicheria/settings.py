@@ -126,13 +126,15 @@ CHANNEL_LAYERS = {
 #       WEBPAY
 # ===========================
 WEBPAY = {
-    "COMMERCE_CODE": os.getenv("WEBPAY_COMMERCE_CODE"),
-    "API_KEY": os.getenv("WEBPAY_API_KEY"),
+    "COMMERCE_CODE": os.getenv("WEBPAY_COMMERCE_CODE", ""),
+    "API_KEY": os.getenv("WEBPAY_API_KEY", ""),
     "ENVIRONMENT": os.getenv("WEBPAY_ENV", "TEST"),
-    "RETURN_URL": os.getenv("WEBPAY_RETURN_URL", ""),
+    "RETURN_URL": os.getenv(
+        "WEBPAY_RETURN_URL",
+        "https://cevicheria-production-1707.up.railway.app/webpay/commit/",
+    ),
     "FINAL_URL": os.getenv("WEBPAY_FINAL_URL", ""),
 }
-
 # ===========================
 #     VALIDADORES PASSWORD
 # ===========================
